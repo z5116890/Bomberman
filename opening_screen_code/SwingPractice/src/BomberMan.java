@@ -7,8 +7,6 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
-import javax.swing.JTextField;
-import javax.swing.JRadioButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.GridLayout;
@@ -29,9 +27,6 @@ import javax.sound.sampled.Clip;
 public class BomberMan extends JFrame {
 
 	private JFrame frmBomberman;
-	private JTextField txtName;
-	private final ButtonGroup radios = new ButtonGroup();
-	JLabel lblRadio = new JLabel("radio1");
 
 	public BomberMan(){
 		initialize();
@@ -59,18 +54,6 @@ public class BomberMan extends JFrame {
 		});
 	}
 
-	class RadioListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// to give us the source object that triggered the action.
-			//In other words, the radio button that was clicked.
-			JRadioButton btn = (JRadioButton) e.getSource();
-			lblRadio.setText(btn.getText());
-
-		}
-	}
-
 	/**
 	 * Initialize the contents of the frame.
 	 */
@@ -79,32 +62,30 @@ public class BomberMan extends JFrame {
 		//Initial JFrame
 		frmBomberman = new JFrame();
 		frmBomberman.setTitle("bomberman");
-		frmBomberman.setBounds(100, 100, 1100, 648);
+		frmBomberman.setBounds(100, 100, 640, 640);
 		frmBomberman.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmBomberman.getContentPane().setLayout(new BorderLayout());
 
-		//Read the picture as a BufferedImage
+		//Read the background picture as a BufferedImage
 		BufferedImage img = null;
 		try {
-			img = ImageIO.read(new File("bombparade_sml.jpg"));
+			img = ImageIO.read(new File("missile_square_640x640.jpg"));
 			System.out.println("reading image");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		//Resize the BufferedImage to background size
-		Image dimg = img.getScaledInstance(1100, 648, SCALE_SMOOTH);
-
+		//Resize the BufferedImage to correct size (640 x 640)
+		//Might not be necessary, image has been resized anyway
+		//But just to be sure
+		Image dimg = img.getScaledInstance(640, 640, SCALE_SMOOTH);
 		ImageIcon imageIcon = new ImageIcon(dimg);
 
+		//Background
 		JLabel background2=new JLabel(imageIcon);
-
 		background2.setVisible(true);
-
-
-		background2.setSize(1100, 648);
+		background2.setSize(640, 640);
 		//background2.setLayout(new GridLayout(3,3));
-
 		frmBomberman.add(background2);
 
 		JButton btnButtontest = new JButton("Play Bomberman");
@@ -116,15 +97,18 @@ public class BomberMan extends JFrame {
 
 			}
 		});
+
+		//Button font and colour
 		btnButtontest.setFont(new Font("Impact", Font.PLAIN, 16));
 		btnButtontest.setForeground(new Color(208, 17, 8));
 
-		btnButtontest.setSize(new Dimension(100, 50));
+		//Dimensions of button
+		btnButtontest.setSize(new Dimension(100, 40));
 
-		btnButtontest.setBounds(450, 300, 200, 80);
+		//set position of button. Would be better to to this relatively perhaps
+		btnButtontest.setBounds(220, 220, 200, 80);
 
-
-		//frmBomberman.getContentPane().add(btnButtontest);
+		//add button to background
 		background2.add(btnButtontest);
 
 
@@ -134,9 +118,7 @@ public class BomberMan extends JFrame {
 
 		//music - DPRK anthem
 		try{
-			AudioInputStream audioInputStream =AudioSystem.getAudioInputStream(new File("anthem2.wav"));
-			//(this.getClass().getResource("anthem.mp3"));
-
+			AudioInputStream audioInputStream =AudioSystem.getAudioInputStream(new File("anthem.wav"));
 			Clip clip = AudioSystem.getClip();
 			clip.open(audioInputStream);
 			clip.start();
@@ -144,6 +126,7 @@ public class BomberMan extends JFrame {
 		catch(Exception e) {
 			e.printStackTrace();
 		}
+	} //playMusic
 
-	}
+
 }
