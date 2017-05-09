@@ -88,28 +88,82 @@ public class BomberMan extends JFrame {
 		//background2.setLayout(new GridLayout(3,3));
 		frmBomberman.add(background2);
 
-		JButton btnButtontest = new JButton("Play Bomberman");
-		btnButtontest.addActionListener(new ActionListener() {
+		JButton playButton = new JButton("Play Bomberman");
+		playButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				btnButtontest.setForeground(new Color(000, 000, 255));
+				playButton.setForeground(new Color(000, 000, 255));
 				//this is where we should start the game
 
 			}
 		});
 
 		//Button font and colour
-		btnButtontest.setFont(new Font("Impact", Font.PLAIN, 16));
-		btnButtontest.setForeground(new Color(208, 17, 8));
+		playButton.setFont(new Font("Impact", Font.PLAIN, 16));
+		playButton.setForeground(new Color(208, 17, 8));
 
 		//Dimensions of button
-		btnButtontest.setSize(new Dimension(100, 40));
+		playButton.setSize(new Dimension(100, 20));
 
 		//set position of button. Would be better to to this relatively perhaps
-		btnButtontest.setBounds(220, 220, 200, 80);
+		playButton.setBounds(220, 225, 200, 50);
 
 		//add button to background
-		background2.add(btnButtontest);
+		background2.add(playButton);
+
+
+		//HIGH SCORES BUTTON
+
+		JButton highScoresButton = new JButton("Glorious scores");
+		highScoresButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				highScoresButton.setForeground(new Color(000, 000, 255));
+				//this is where we should start the game
+
+			}
+		});
+
+		//Button font and colour
+		highScoresButton.setFont(new Font("Impact", Font.PLAIN, 16));
+		highScoresButton.setForeground(new Color(208, 17, 8));
+
+		//Dimensions of button
+		highScoresButton.setSize(new Dimension(100, 20));
+
+		//set position of button. Would be better to to this relatively perhaps
+		highScoresButton.setBounds(220, 295, 200, 50);
+
+		//add button to background
+		background2.add(highScoresButton);
+
+
+		JButton optionsButton = new JButton("Options");
+		optionsButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+				optionsButton.setForeground(new Color(000, 000, 255));
+				//this is where we should start the game
+
+			}
+		});
+
+
+		//OPTIONS BUTTON
+
+		//Button font and colour
+		optionsButton.setFont(new Font("Impact", Font.PLAIN, 16));
+		optionsButton.setForeground(new Color(208, 17, 8));
+
+		//Dimensions of button
+		optionsButton.setSize(new Dimension(100, 20));
+
+		//set position of button. Would be better to to this relatively perhaps
+		optionsButton.setBounds(220, 365, 200, 50);
+
+		//add button to background
+		background2.add(optionsButton);
+
 
 
 	} //initialise
