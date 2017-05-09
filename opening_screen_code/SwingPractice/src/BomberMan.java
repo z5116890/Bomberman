@@ -165,7 +165,6 @@ public class BomberMan extends JFrame {
 		background2.add(optionsButton);
 
 
-
 	} //initialise
 
 	public void playMusic(){
