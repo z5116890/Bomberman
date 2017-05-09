@@ -1,0 +1,116 @@
+import java.util.ArrayList;
+import javax.swing.*;
+public class GameManager {
+	public static final int MAP_SIZE = 640;
+	public static final int CELL_COUNT = 20;
+	public static final int CELL_SIZE = MAP_SIZE/CELL_COUNT;//32
+	
+	//map generation stuff
+	private static final int EMPTY = 0;
+	private static final int WALL = 1;
+	private static final int BOX = 2;
+	private static final int PLAYER = 3;
+	private static final int ENDZONE = 4;
+	
+	
+	private static GameManager gm;
+		
+	private ArrayList<GameObject> gameObjects;
+	private ArrayList<EndZone> endZones;
+	private Player player;
+	private JFrame frame;
+	private PaintingPanel panel;
+	
+	private GameManager(){
+		gm = this;
+		panel = new PaintingPanel();
+		createMap();
+	}
+	public static void main(String args[]){
+		gm = new GameManager();
+		gm.runGame();
+	}
+	private void draw(){
+		panel.repaint();
+	}
+	private void createMap(){
+		int[][] map = {
+				{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
+				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+				{1,0,3,0,0,0,0,2,2,2,0,0,0,0,0,0,0,0,0,1},
+				{1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
+				{1,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1},
+				{1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1},
+				{1,0,0,0,1,0,0,4,0,0,1,0,0,0,0,0,0,0,0,1},
+				{1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1},
+				{1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1},
+				{1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1},
+				{1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1},
+				{1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1},
+				{1,0,0,0,1,0,0,0,0,0,1,0,4,2,4,0,1,0,0,1},
+				{1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1},
+				{1,0,0,0,1,0,0,0,0,0,1,1,1,1,1,1,1,0,0,1},
+				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1},
+				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,4,1},
+				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,1,1},
+				{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
+		};
+		
+		//Create map from array
+		ArrayList<GameObject> walls = new ArrayList<GameObject>();
+		ArrayList<EndZone> endzones = new ArrayList<EndZone>();
+		ArrayList<GameObject> boxes = new ArrayList<GameObject>();
+		ArrayList<Player> players = new ArrayList<Player>();
+		
+		for(int y = 0;y<map.length;y++){
+			for(int x = 0;x<map[y].length;x++){
+				switch(map[y][x]){
+					case EMPTY:
+						break;
+					case WALL:
+						walls.add(new Wall(x,y));
+						break;
+					case BOX:
+						boxes.add(new Box(x,y));
+						break;
+					case PLAYER:
+						players.add(new Player(x,y));
+						break;
+					case ENDZONE:
+						endzones.add(new EndZone(x,y));
+						break;
+				}
+			}
+		}
+		gameObjects.addAll(walls);
+		gameObjects.addAll(boxes);
+		endZones.addAll(endzones);
+		player = players.get(0);//there should be one and only one of these for now. 
+		
+		panel.addGameObjects(walls);
+		panel.addGameObjects(endZones);
+		panel.addGameObjects(boxes);
+		panel.addGameObject(player);
+		
+	}
+	public void runGame(){
+		boolean ended = false;
+		while(!ended){
+			player.act();
+			for(GameObject obj:gameObjects){
+				obj.act();
+			}
+			ended = true;
+			for(EndZone e:endZones){
+				e.act();
+			}
+		}
+	}
+	public GameObject getObjectAtLocation(int x,int y){
+		return null;
+	}
+	public static GameManager getGameManager(){
+		return gm;
+	}
+}

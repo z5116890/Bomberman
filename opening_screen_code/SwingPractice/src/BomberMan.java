@@ -110,7 +110,6 @@ public class BomberMan extends JFrame {
 		JButton btnButtontest = new JButton("Play Bomberman");
 		btnButtontest.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
 				btnButtontest.setForeground(new Color(000, 000, 255));
 				//this is where we should start the game
 
