@@ -182,7 +182,7 @@ public class GameManager {
 		//creating background
 		BufferedImage img = null;
 		try{
-			img = ImageIO.read(new File("bombparade_sml.jpg"));
+			img = ImageIO.read(new File("missile_square_640x640.jpg"));
 		}catch(IOException e){
 			e.printStackTrace();
 		}
