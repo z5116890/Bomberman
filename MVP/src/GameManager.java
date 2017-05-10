@@ -209,9 +209,41 @@ public class GameManager {
 		btnStart.setFont(new Font("Impact", Font.PLAIN,16));
 		btnStart.setForeground(new Color(208,17,8));
 		btnStart.setSize(new Dimension(100,500));
-		btnStart.setBounds(450,300,200,80);
-		
+		btnStart.setBounds(220,225,200,50);
+
 		background.add(btnStart);
+
+		//creating high scores button
+		JButton btnHighScores = new JButton("Glorious scores");
+		btnHighScores.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+
+				btnHighScores.setForeground(new Color(0,0,255));
+			}
+		});
+		btnHighScores.setFont(new Font("Impact", Font.PLAIN,16));
+		btnHighScores.setForeground(new Color(208,17,8));
+		btnHighScores.setSize(new Dimension(100,500));
+		btnHighScores.setBounds(220,295,200,50);
+
+		background.add(btnHighScores);
+
+		//creating options button
+		JButton btnOptions = new JButton("Options");
+		btnOptions.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+
+				btnOptions.setForeground(new Color(0,0,255));
+			}
+		});
+		btnOptions.setFont(new Font("Impact", Font.PLAIN,16));
+		btnOptions.setForeground(new Color(208,17,8));
+		btnOptions.setSize(new Dimension(100,500));
+		btnOptions.setBounds(220,365,200,50);
+
+		background.add(btnOptions);
+
+
 		frame.pack();
 		frame.setSize(640,640);
 		while(!gameStarted)System.out.println("");
