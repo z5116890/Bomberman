@@ -9,11 +9,11 @@ public class GameObject {
 	public static final float INCREMENT = 1f;
 
 	protected BufferedImage image;
-	protected int gridX;
-	protected int gridY;
-	protected float realX;
-	protected float realY;
-	protected float speed = 0.1f;
+	protected int gridX;			//gridX / grid Y hold the grid position of the GameObject
+	protected int gridY;			// i.e. where it is *on the way* to moving to (can = current position)
+	protected int realX;			//realX / realY is what is seen on the screen, object in motion
+	protected int realY;
+	protected int speed = 1; //pixels to move per frame. Must be >0
 
 
 	//No constructor for GameObject?
@@ -38,10 +38,10 @@ public class GameObject {
 		return this.gridY;
 	}
 	public int getRealX(){
-		return (int)this.realX;
+		return this.realX;
 	}
 	public int getRealY(){
-		return (int)this.realY;
+		return this.realY;
 	}
 
 	public BufferedImage getImage(){
@@ -66,11 +66,11 @@ public class GameObject {
 		this.gridY = gridY;
 	}
 
-	public void setRealX(float realX) {
+	public void setRealX(int realX) {
 		this.realX = realX;
 	}
 
-	public void setRealY(float realY) {
+	public void setRealY(int realY) {
 		this.realY = realY;
 	}
 
@@ -92,37 +92,70 @@ public class GameObject {
 
 	protected void move(){
 
-		//gridX / grid Y hold the grid position of the GameObject
-		// i.e. where it is *on the way* to moving to (if it is stationary, it's moving to where it is)
-		//realX / realY is what is seen on the screen, object in motion
-
-		float xDisplace = (float)gridX - realX;
+		//this is the displacement in pixels
+		//if the object is *left* of grid position, xDisplace is positive (gridX>realX)
+		//if the object is *right* of grid position, xDisplace is negative (gridX<realX)
+		int xDisplace = (GameManager.CELL_SIZE)*gridX - realX;
 
 		//if xDisplace is zero, the GameObject has finished moving on the x-axis
 		//i.e. its realX and gridX are equal, it is not "on the way" anywhere
 		//in this case, do nothing
 		if (xDisplace != 0)
 		{
-			this.realX += Math.abs(xDisplace) > this.speed ? this.speed * Math.signum(xDisplace) : xDisplace;
+			//if the object is *left* of grid position, realX must be incremented
+			//else if object is *right* of grid position, realX must be decremented
+			int pixelsToMove = this.speed;
 
-			//this is a translation of Daniel's C# version
-			//I was just thinking: realX += speed*Math.signum(xDisplace); .....
+			//We don't want to "overshoot" the desired destination position
+			if (pixelsToMove>Math.abs(xDisplace)){
+				pixelsToMove = Math.abs(xDisplace);
+			}
+
+			//Move
+			if (xDisplace>0){
+				this.realX += pixelsToMove;
+
+			} else {
+				this.realX -= pixelsToMove;
+			}
+
+			//this.realX += Math.abs(xDisplace) > this.speed ? this.speed * Math.signum(xDisplace) : xDisplace;
+			//this is a translation of Daniel's C# version ^^^
 		}
+
+		//displacement in pixels
+		//if the object is *above* the grid position, yDisplace is positive (gridY>realY)
+		//if the object is *below* the grid position, yDisplace is negative (gridY<realY)
+		int yDisplace = (GameManager.CELL_SIZE)*gridY - realY;
 
 		//if yDisplace is zero, the GameObject has finished moving on the y-axis
 		//i.e. its realY and gridY are equal, it is not "on the way" anywhere
 		//in this case, do nothing
-		float yDisplace = (float)gridY - realY;
 		if (yDisplace != 0)
 		{
-			this.realY += Math.abs(xDisplace) > this.speed ? this.speed * Math.signum(xDisplace) : xDisplace;
+			//if the object is *above* the grid position, realY must be incremented
+			//else if object is *below* the grid position, realY must be decremented
+			int pixelsToMove = this.speed;
+
+			//We don't want to "overshoot" the desired destination position
+			if (pixelsToMove>Math.abs(yDisplace)){
+				pixelsToMove = Math.abs(yDisplace);
+			}
+
+			//Move
+			if (yDisplace>0){
+				this.realX += pixelsToMove;
+
+			} else {
+				this.realX -= pixelsToMove;
+			}
+
+			//this.realY += Math.abs(xDisplace) > this.speed ? this.speed * Math.signum(xDisplace) : xDisplace;
+			//this is a translation of Daniel's C# version ^^^
 		}
 
 		//this is Unity stuff I think
 		//transform.position = new Vector3(START + realX, transform.position.y, START + realY);
-
-
-
 	}
 
 }
