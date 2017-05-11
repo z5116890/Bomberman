@@ -11,7 +11,21 @@ public class GameObject {
 	protected int gridY;
 	protected int realX;
 	protected int realY;
-	protected int speed;
+	protected float speed = 0.1f;
+
+
+	//No constructor for GameObject?
+//	//Constructor
+//	public GameObject(int x, int y){
+//
+//		this.gridX = x;
+//		this.gridY = y;
+//
+//		//Assuming realX/realY are the pixel positions, of the upper left corner
+//		this.realX = x*GameManager.CELL_SIZE;
+//		this.realY = y*GameManager.CELL_SIZE;
+//	}
+
 
 	//Getters
 
@@ -65,6 +79,7 @@ public class GameObject {
 
 	//Other functions
 
+	//this is "be pushed" in the case of boxes etc, false unless overridden in subclass?
 	public boolean interact(int direction){
 		return false;
 	}
@@ -74,7 +89,9 @@ public class GameObject {
 	}
 
 	protected void move(){
-		
+
+
+
 	}
 
 }
