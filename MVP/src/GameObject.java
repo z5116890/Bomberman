@@ -1,16 +1,18 @@
 import java.awt.image.BufferedImage;
 
 public class GameObject {
+
 	public static final int UP = 1;
 	public static final int DOWN = 2;
 	public static final int LEFT = 3;
 	public static final int RIGHT = 4;
+	public static final float INCREMENT = 1f;
 
 	protected BufferedImage image;
 	protected int gridX;
 	protected int gridY;
-	protected int realX;
-	protected int realY;
+	protected float realX;
+	protected float realY;
 	protected float speed = 0.1f;
 
 
@@ -36,10 +38,10 @@ public class GameObject {
 		return this.gridY;
 	}
 	public int getRealX(){
-		return this.realX;
+		return (int)this.realX;
 	}
 	public int getRealY(){
-		return this.realY;
+		return (int)this.realY;
 	}
 
 	public BufferedImage getImage(){
@@ -64,11 +66,11 @@ public class GameObject {
 		this.gridY = gridY;
 	}
 
-	public void setRealX(int realX) {
+	public void setRealX(float realX) {
 		this.realX = realX;
 	}
 
-	public void setRealY(int realY) {
+	public void setRealY(float realY) {
 		this.realY = realY;
 	}
 
@@ -89,6 +91,35 @@ public class GameObject {
 	}
 
 	protected void move(){
+
+		//gridX / grid Y hold the grid position of the GameObject
+		// i.e. where it is *on the way* to moving to (if it is stationary, it's moving to where it is)
+		//realX / realY is what is seen on the screen, object in motion
+
+		float xDisplace = (float)gridX - realX;
+
+		//if xDisplace is zero, the GameObject has finished moving on the x-axis
+		//i.e. its realX and gridX are equal, it is not "on the way" anywhere
+		//in this case, do nothing
+		if (xDisplace != 0)
+		{
+			this.realX += Math.abs(xDisplace) > this.speed ? this.speed * Math.signum(xDisplace) : xDisplace;
+
+			//this is a translation of Daniel's C# version
+			//I was just thinking: realX += speed*Math.signum(xDisplace); .....
+		}
+
+		//if yDisplace is zero, the GameObject has finished moving on the y-axis
+		//i.e. its realY and gridY are equal, it is not "on the way" anywhere
+		//in this case, do nothing
+		float yDisplace = (float)gridY - realY;
+		if (yDisplace != 0)
+		{
+			this.realY += Math.abs(xDisplace) > this.speed ? this.speed * Math.signum(xDisplace) : xDisplace;
+		}
+
+		//this is Unity stuff I think
+		//transform.position = new Vector3(START + realX, transform.position.y, START + realY);
 
 
 
