@@ -9,22 +9,22 @@ public class Player extends GameObject{
 	//UP = 1, DOWN = 2, LEFT = 3, RIGHT = 4;
 	public boolean interact(int direction){
 		//see if anything is in the way ie box, wall
-		if(direction == 1){
+		if(direction == UP){
 			if(this.movable(this.gridX, this.gridY + 1)){
 				this.gridY++;
 				return true;
 			}
-		}else if(direction == 2){
+		}else if(direction == DOWN){
 			if(this.movable(this.gridX, this.gridY - 1)){
 				this.gridY--;
 				return true;
 			}
-		}else if(direction == 3){
+		}else if(direction == LEFT){
 			if(this.movable(this.gridX - 1, this.gridY)){
 				this.gridX--;
 				return true;
 			}
-		}else if(direction == 4){
+		}else if(direction == RIGHT){
 			if(this.movable(this.gridX + 1, this.gridY)){
 				this.gridX++;
 				return true;
