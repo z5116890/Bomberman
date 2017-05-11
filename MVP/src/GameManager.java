@@ -1,6 +1,8 @@
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -12,11 +14,11 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
 //import java.util.
-public class GameManager {
+public class GameManager{
 	public static final int MAP_SIZE = 640;
 	public static final int CELL_COUNT = 20;
 	public static final int CELL_SIZE = MAP_SIZE/CELL_COUNT;//32
-	public static final int TARGET_FRAME_RATE = 10;
+	public static final int TARGET_FRAME_RATE = 32;
 	
 	//map generation stuff
 	private static final int EMPTY = 0;
@@ -102,21 +104,21 @@ public class GameManager {
 					case EMPTY:
 						break;
 					case WALL:
-						//walls.add(new Wall(x,y));
+						walls.add(new Wall(x,y));
 						break;
 					case BOX:
-						//boxes.add(new Box(x,y));
+						boxes.add(new Box(x,y));
 						break;
 					case PLAYER:
-						//players.add(new Player(x,y));
+						players.add(new Player(x,y));
 						break;
 					case ENDZONE:
-						//endzones.add(new EndZone(x,y));
+						endzones.add(new EndZone(x,y));
 						break;
 				}
 			}
 		}
-		/*
+		
 		gameObjects.addAll(walls);
 		gameObjects.addAll(boxes);
 		endZones.addAll(endzones);
@@ -126,13 +128,18 @@ public class GameManager {
 		panel.addGameObjects(endZones);
 		panel.addGameObjects(boxes);
 		panel.addGameObject(player);
-		*/
+		
 	}
 	//all of the actual game is run in here, the method doesn't end until the game is over
 	public void runGame(){
 		frame.add(panel);
 		frame.pack();
-		frame.setSize(panel.getPreferredSize());
+		frame.addKeyListener(new KeyInputListener());
+		frame.setFocusable(true);
+		frame.requestFocus();
+		panel.addKeyListener(new KeyInputListener());
+		panel.setFocusable(true);
+		//frame.setSize(panel.getPreferredSize());
 		long time = 0;
 		boolean ended = false;
 		while(!ended){
@@ -145,7 +152,7 @@ public class GameManager {
 				obj.act();
 			}
 			
-			//ended = true;
+			ended = true;
 			for(EndZone e:endZones){
 				e.act();
 				if(!e.getActive())ended = false;
@@ -254,6 +261,22 @@ public class GameManager {
 	}
 	public void startGame(){
 		gameStarted = true;
+	}
+	public void keyPressed(int keyCode){
+		switch(keyCode){
+		case KeyEvent.VK_UP:
+			player.setAction(GameObject.UP);
+			break;
+		case KeyEvent.VK_DOWN:
+			player.setAction(GameObject.DOWN);
+			break;
+		case KeyEvent.VK_LEFT:
+			player.setAction(GameObject.LEFT);
+			break;
+		case KeyEvent.VK_RIGHT:
+			player.setAction(GameObject.RIGHT);			
+			break;
+		}
 	}
 }
 

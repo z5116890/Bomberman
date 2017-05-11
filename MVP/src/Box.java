@@ -1,8 +1,9 @@
 
 public class Box extends GameObject{
 	
-	public Box(){
-		
+	public Box(int x,int y){
+		super("Box.png",x,y);
+
 	}
 	
 	@Override
@@ -10,9 +11,9 @@ public class Box extends GameObject{
 		int dx = 0;
 		int dy = 0;
 		if (direction == UP) { 
-			dy = 1;
-		} else if (direction == DOWN) {
 			dy = -1;
+		} else if (direction == DOWN) {
+			dy = 1;
 		} else if (direction == LEFT) {
 			dx = -1;
 		} else if (direction == RIGHT) {

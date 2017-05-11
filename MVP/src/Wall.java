@@ -6,7 +6,8 @@ import java.io.IOException;
 public class Wall extends GameObject{
 
     public Wall (int x, int y){
-
+    	super("Wall.png",x,y);
+    	/*
         this.gridX = x;
         this.gridY = y;
         this.realX = x*GameManager.CELL_SIZE;
@@ -24,6 +25,7 @@ public class Wall extends GameObject{
         this.image = img;
 
         //System.out.println("making a wall");
+       */
     }
 
 }

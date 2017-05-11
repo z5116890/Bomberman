@@ -19,12 +19,8 @@ public class PaintingPanel extends JPanel {
 	public Dimension getPreferredSize(){
 		return new Dimension(DEFAULT_WINDOW_SIZE,DEFAULT_WINDOW_SIZE);
 	}
-	int i = 0;
 	public void paintComponent(Graphics g){//Might need to come back to this.
 		super.paintComponent(g);
-		g.setColor(new Color(100-2*i/3,100,100+i++));
-		i%=150;
-		g.fillRect(0, 0, DEFAULT_WINDOW_SIZE, DEFAULT_WINDOW_SIZE);
 		
 		for(GameObject go:renderList){
 			g.drawImage(go.getImage(),go.getRealX(),go.getRealY(),null);
