@@ -29,12 +29,16 @@ public class GameObject {
 	}
 
 	public BufferedImage getImage(){
+
 		return this.image;
 	}
 
 	//Setters
 
 	public void setImage(BufferedImage image) {
+
+		//if the screen is 640x640px, and there are 20x20cells, the images should be 32x32px I'm guessing
+
 		this.image = image;
 	}
 
@@ -72,5 +76,5 @@ public class GameObject {
 	protected void move(){
 		
 	}
-	
+
 }
