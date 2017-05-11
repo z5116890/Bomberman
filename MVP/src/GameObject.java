@@ -1,4 +1,8 @@
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 public class GameObject {
 
@@ -6,27 +10,31 @@ public class GameObject {
 	public static final int DOWN = 2;
 	public static final int LEFT = 3;
 	public static final int RIGHT = 4;
-	public static final float INCREMENT = 1f;
 
 	protected BufferedImage image;
 	protected int gridX;			//gridX / grid Y hold the grid position of the GameObject
 	protected int gridY;			// i.e. where it is *on the way* to moving to (can = current position)
 	protected int realX;			//realX / realY is what is seen on the screen, object in motion
 	protected int realY;
-	protected int speed = 1; //pixels to move per frame. Must be >0
+	protected int speed = 4; //pixels to move per frame. Must be >0
 
 
-	//No constructor for GameObject?
-//	//Constructor
-//	public GameObject(int x, int y){
-//
-//		this.gridX = x;
-//		this.gridY = y;
-//
-//		//Assuming realX/realY are the pixel positions, of the upper left corner
-//		this.realX = x*GameManager.CELL_SIZE;
-//		this.realY = y*GameManager.CELL_SIZE;
-//	}
+	//Constructor
+	public GameObject(String imageName,int x, int y){
+
+		this.gridX = x;
+		this.gridY = y;
+
+		//Assuming realX/realY are the pixel positions, of the upper left corner
+		this.realX = x*GameManager.CELL_SIZE;
+		this.realY = y*GameManager.CELL_SIZE;
+		
+		try{
+            image = ImageIO.read(new File(imageName));
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+	}
 
 
 	//Getters
@@ -144,18 +152,16 @@ public class GameObject {
 
 			//Move
 			if (yDisplace>0){
-				this.realX += pixelsToMove;
+				this.realY += pixelsToMove;
 
 			} else {
-				this.realX -= pixelsToMove;
+				this.realY -= pixelsToMove;
 			}
 
 			//this.realY += Math.abs(xDisplace) > this.speed ? this.speed * Math.signum(xDisplace) : xDisplace;
 			//this is a translation of Daniel's C# version ^^^
+			
 		}
-
-		//this is Unity stuff I think
-		//transform.position = new Vector3(START + realX, transform.position.y, START + realY);
 	}
 
 }
