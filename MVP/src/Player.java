@@ -42,7 +42,13 @@ public class Player extends GameObject{
 
 	
 	public boolean movable(int x, int y){
-		if(GameManager.getGameManager().getObjectAtLocation(x, y) != null) return false;
+		GameObject obj = GameManager.getGameManager().getObjectAtLocation(x, y);
+		//if there is something there
+		if(obj != null){
+			//if it is not physical than return false
+			if(!(obj instanceof EndZone)) return false;
+		}
+		//else return true
 		return true;
 	}
 }
