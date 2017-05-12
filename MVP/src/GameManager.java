@@ -40,6 +40,7 @@ public class GameManager{
 	//Swing stuff
 	private JFrame frame;
 	private PaintingPanel panel;
+	private float framerateMultiplier = 1;
 	//Start Menu stuff
 	private JTextField txtName;
 	private final ButtonGroup radios = new ButtonGroup();
@@ -160,7 +161,7 @@ public class GameManager{
 			}
 			draw();
 			//limits the frame rate
-			while(System.nanoTime()-time<(long)(1000000000L/TARGET_FRAME_RATE));
+			while(System.nanoTime()-time<(long)(1000000000L/(TARGET_FRAME_RATE*framerateMultiplier)));
 		}
 
 	}
@@ -246,8 +247,8 @@ public class GameManager{
 		speedSlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent event) {
 				int value = speedSlider.getValue();
-
-				System.out.println("Setting speed to " + value);
+				GameManager.getGameManager().setSpeed(0.1f + (value*value)/10f);
+				//System.out.println("Setting speed to " + value);
 			}
 		});
 
@@ -359,6 +360,9 @@ public class GameManager{
 				player.setAction(GameObject.RIGHT);
 				break;
 		}
+	}
+	public void setSpeed(float multiplier){
+		framerateMultiplier = multiplier;
 	}
 }
 

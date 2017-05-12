@@ -29,3 +29,8 @@ hs_err_pid*
 \.metadata
 \.recommenders
 *.lock
+.metadata/.plugins/org.eclipse.jdt.core/externalLibsTimeStamps
+*.index
+.metadata/.plugins/org.eclipse.e4.workbench/workbench.xmi
+*.xmi
+.metadata/.plugins/org.eclipse.core.resources/.safetable/org.eclipse.core.resources
