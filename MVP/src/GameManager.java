@@ -29,7 +29,7 @@ public class GameManager{
 	private static final int ENDZONE = 4;
 
 
-	private static GameManager gm;
+	private static GameManager gm; 
 
 	//Game State
 	private boolean gameStarted = false;
