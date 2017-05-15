@@ -359,6 +359,9 @@ public class GameManager{
 			case KeyEvent.VK_RIGHT:
 				player.setAction(GameObject.RIGHT);
 				break;
+			case KeyEvent.VK_P:
+				//paused = true;
+				break;
 		}
 	}
 	public void setSpeed(float multiplier){
