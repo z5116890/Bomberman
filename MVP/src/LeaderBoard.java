@@ -9,14 +9,18 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 public class LeaderBoard {
-	ArrayList<String> highScores; //store the strings
-	File file; //store the file itself
+	private ArrayList<String> highScores; //store the strings
+	private File file; //store the file itself
+	private static final int MAX_SCORES = 5;
 	
 	public LeaderBoard() {
 		checkIfExists();
 		readFile();
 	}
 	
+	/**
+	 * reads the leaderboard file and stores each highscore in an array
+	 */
 	public void readFile() {
 		FileReader read = null;
 		BufferedReader reader = null;
@@ -40,18 +44,29 @@ public class LeaderBoard {
 		}
 	}
 	
+	/**
+	 * checks if the leaderboard data file exists
+	 * 		if it doesnt, creates one
+	 */
 	public void checkIfExists(){
-		File scoreFile = new File("highscores.dat");
-		if (!scoreFile.exists()) {
+		File highScoresFile = new File("leaderboard.dat");
+		if (!highScoresFile.exists()) {
 			try {
-				scoreFile.createNewFile();
+				highScoresFile.createNewFile();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
-		file = scoreFile;
+		file = highScoresFile;
 	}
-		
+	
+	/**
+	 * compares the current score to the high scores
+	 * 		if current score is a high score, puts it in its respective position
+	 * 			if the leaderboard is filled, removes the last score
+	 * 			break out of loop
+	 * @param score
+	 */
 	public void checkScores(int score) {
 		int pos = 0;
 		for (String highScore: highScores) {
@@ -59,17 +74,23 @@ public class LeaderBoard {
 				String name = JOptionPane.showInputDialog("You set a new high score. What is your name?");
 				String newHighScore = name + ":" + score;
 				highScores.add(pos, newHighScore);
-				highScores.remove(highScores.size()-1);
+				if (highScores.size() > MAX_SCORES) {
+					highScores.remove(highScores.size()-1);
+				}
+				break;
 			}
 			pos++;
 		}
 	}
 	
+	/**
+	 * rewrites the highscores file
+	 */
 	public void writeScores() { //rewrite the whole file
 		FileWriter write = null;
 		BufferedWriter writer = null;
 		try {
-			write = new FileWriter(file);
+			write = new FileWriter(file, false);
 			writer = new BufferedWriter(write);
 			for (String score: highScores) {
 				writer.write(score);
