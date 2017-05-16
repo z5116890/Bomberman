@@ -282,11 +282,22 @@ public class GameManager{
 		background.add(btnBack);
 
 	}
+	
+	/**
+	 * Displays the current leaderboard
+	 * @param background
+	 */
+	private void displayLeaderBoard(JLabel background) {
+		
+	}
 
 	private void addStartMenuButtons(JLabel background){
-
-		//creating start button
 		JButton btnStart = new JButton("Play Bomberman");
+		JButton btnHighScores = new JButton("Glorious scores");
+		JButton btnOptions = new JButton("Options");
+		//moved the constructors here to avoid error - GRANT
+		
+		//creating start button
 		btnStart.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 
@@ -302,12 +313,15 @@ public class GameManager{
 		background.add(btnStart);
 
 		//creating high scores button
-		JButton btnHighScores = new JButton("Glorious scores");
 		btnHighScores.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 
-
-				btnHighScores.setForeground(new Color(0,0,255));
+				background.remove(btnHighScores);
+				background.remove(btnStart);
+				background.remove(btnOptions);
+				displayLeaderBoard(background);
+				//btnHighScores.setForeground(new Color(0,0,255));
+				background.repaint();
 			}
 		});
 		btnHighScores.setFont(new Font("Impact", Font.PLAIN,16));
@@ -318,7 +332,6 @@ public class GameManager{
 		background.add(btnHighScores);
 
 		//creating options button
-		JButton btnOptions = new JButton("Options");
 		btnOptions.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 

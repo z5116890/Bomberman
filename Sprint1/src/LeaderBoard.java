@@ -84,7 +84,7 @@ public class LeaderBoard {
 	}
 	
 	/**
-	 * rewrites the highscores file
+	 * rewrites the leaderboard file
 	 */
 	public void writeScores() { //rewrite the whole file
 		FileWriter write = null;
