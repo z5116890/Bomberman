@@ -45,10 +45,13 @@ public class GameManager{
 	private JTextField txtName;
 	private final ButtonGroup radios = new ButtonGroup();
 	private JLabel lblRadio = new JLabel("radio1");
+	//leaderboard
+	private LeaderBoard leaderBoard;
 
 	private GameManager(){
 		gm = this;
 		panel = new PaintingPanel();
+		leaderBoard = new LeaderBoard();
 
 		frame = new JFrame("Bomberman");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -288,7 +291,10 @@ public class GameManager{
 	 * @param background
 	 */
 	private void displayLeaderBoard(JLabel background) {
-		
+		int spacing = 50;
+		for (String score: leaderBoard.getLeaderBoard()) {
+			
+		}
 	}
 
 	private void addStartMenuButtons(JLabel background){

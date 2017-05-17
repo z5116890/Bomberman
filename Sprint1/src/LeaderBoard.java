@@ -19,6 +19,22 @@ public class LeaderBoard {
 	}
 	
 	/**
+	 * checks if the leaderboard data file exists
+	 * 		if it doesnt, creates one
+	 */
+	public void checkIfExists(){
+		File highScoresFile = new File("leaderboard.dat");
+		if (!highScoresFile.exists()) {
+			try {
+				highScoresFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		file = highScoresFile;
+	}
+	
+	/**
 	 * reads the leaderboard file and stores each highscore in an array
 	 */
 	public void readFile() {
@@ -42,22 +58,6 @@ public class LeaderBoard {
 				}
 			}
 		}
-	}
-	
-	/**
-	 * checks if the leaderboard data file exists
-	 * 		if it doesnt, creates one
-	 */
-	public void checkIfExists(){
-		File highScoresFile = new File("leaderboard.dat");
-		if (!highScoresFile.exists()) {
-			try {
-				highScoresFile.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
-		file = highScoresFile;
 	}
 	
 	/**
@@ -106,6 +106,10 @@ public class LeaderBoard {
 				}
 			}
 		}
+	}
+	
+	public ArrayList<String> getLeaderBoard() {
+		return this.highScores;
 	}
 	
 }
