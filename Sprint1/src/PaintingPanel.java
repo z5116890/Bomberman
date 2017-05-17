@@ -33,6 +33,9 @@ public class PaintingPanel extends JPanel {
 	public void removeGameObject(GameObject obj){
 		renderList.remove(obj);
 	}
+	public void removeGameObjects(ArrayList<GameObject> objs){
+		renderList.removeAll(objs);
+	}
 	public void addGameObjects(ArrayList objs){
 		for(Object obj:objs){
 			if(obj instanceof GameObject)

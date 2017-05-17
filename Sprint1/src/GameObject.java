@@ -35,8 +35,16 @@ public class GameObject {
             e.printStackTrace();
         }
 	}
+	
+	public GameObject(int x, int y){
 
+		this.gridX = x;
+		this.gridY = y;
 
+		//Assuming realX/realY are the pixel positions, of the upper left corner
+		this.realX = x*GameManager.CELL_SIZE;
+		this.realY = y*GameManager.CELL_SIZE;
+	}
 	//Getters
 
 	public int getX(){

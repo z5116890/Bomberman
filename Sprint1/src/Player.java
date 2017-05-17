@@ -1,6 +1,10 @@
 
 public class Player extends GameObject{
+	public static final int BOMB = 5;
 	private int nextAction = 0;
+	private int bombCount = 8;
+	private int placedBombs = 0;
+	private int explosionSize = 5;
 	public Player(int x, int y) {
 		super("Player_small.png", x, y);
 		speed = 4;
@@ -48,6 +52,9 @@ public class Player extends GameObject{
 			case UP:case DOWN:case LEFT:case RIGHT:
 				interact(nextAction);
 				break;
+			case BOMB:
+				placeBomb();
+				break;
 			}
 			nextAction = 0;
 		}
@@ -74,6 +81,28 @@ public class Player extends GameObject{
 			if( (xDisp<0?-xDisp:xDisp)<= speed && (yDisp<0?-yDisp:yDisp) <= speed)
 			nextAction = action;
 			break;
+		case BOMB:
+			if(placedBombs < bombCount){
+				nextAction = action;
+			}
+			break;
 		}
+	}
+	public int getBombCount(){
+		return bombCount;
+	}
+	public int getExplosionSize(){
+		return explosionSize;
+	}
+	public void decreasePlacedBombs(){
+		placedBombs--;
+	}
+	private void placeBomb(){
+		for(GameObject obj:GameManager.getGameManager().getObjectsAtLocation(gridX, gridY)){
+			if(obj instanceof Bomb)return;
+		}
+		Bomb bomb = new Bomb(gridX,gridY,this);
+		GameManager.getGameManager().addObject(bomb);
+		placedBombs++;
 	}
 }

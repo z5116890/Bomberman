@@ -27,6 +27,7 @@ public class GameManager{
 	private static final int BOX = 2;
 	private static final int PLAYER = 3;
 	private static final int ENDZONE = 4;
+	private static final int BREAKABLE_WALL = 5;
 
 
 	private static GameManager gm; 
@@ -36,6 +37,7 @@ public class GameManager{
 	private ArrayList<GameObject> gameObjects = new ArrayList<GameObject>();
 	private ArrayList<EndZone> endZones = new ArrayList<EndZone>();
 	private Player player;
+	private ArrayList<GameObject> removeList = new ArrayList<GameObject>();
 
 	//Swing stuff
 	private JFrame frame;
@@ -76,24 +78,24 @@ public class GameManager{
 	private void createMap(){
 		int[][] map = {
 				{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
-				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-				{1,0,3,0,0,0,0,2,2,2,0,0,0,0,0,0,0,0,0,1},
-				{1,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1},
-				{1,0,0,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,1},
-				{1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1},
-				{1,0,0,0,1,0,0,4,0,0,1,0,0,0,0,0,0,0,0,1},
-				{1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1},
-				{1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1},
-				{1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1},
-				{1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1},
-				{1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1},
-				{1,0,0,0,1,0,0,0,0,0,1,0,4,2,4,0,1,0,0,1},
-				{1,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1},
-				{1,0,0,0,1,0,0,0,0,0,1,1,1,1,1,1,1,0,0,1},
-				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1},
-				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,4,1},
-				{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,1,1},
+				{1,0,0,0,0,0,0,5,5,5,0,0,0,0,0,0,0,0,0,1},
+				{1,0,3,0,5,5,0,2,2,2,0,0,0,0,0,5,5,0,0,1},
+				{1,0,2,0,0,0,0,5,5,5,0,0,0,0,0,0,5,0,5,1},
+				{1,0,5,0,0,0,0,5,0,5,0,0,0,0,5,5,5,5,5,1},
+				{1,0,0,0,1,1,1,1,1,1,1,0,0,0,5,0,5,0,0,1},
+				{1,0,0,0,1,0,0,5,0,0,1,0,0,0,0,0,5,5,0,1},
+				{1,0,0,0,1,0,5,4,5,0,1,0,0,0,0,0,0,0,0,1},
+				{1,0,0,0,1,5,0,0,0,5,1,0,0,0,0,0,0,0,0,1},
+				{1,0,0,0,1,0,5,0,5,0,1,0,0,0,0,0,0,0,0,1},
+				{1,0,0,0,1,0,0,5,0,0,1,0,0,0,0,0,1,0,0,1},
+				{1,0,0,0,1,0,5,0,5,0,1,5,5,0,5,5,1,0,0,1},
+				{1,0,0,0,1,5,0,0,0,5,1,5,5,5,5,5,1,0,0,1},
+				{1,0,0,0,1,0,5,0,5,0,1,0,4,2,4,0,1,0,0,1},
+				{1,0,0,0,1,0,0,5,0,0,1,0,0,5,0,0,1,5,0,1},
+				{1,5,5,5,1,5,5,5,5,5,1,1,1,1,1,1,1,5,5,1},
+				{1,0,0,0,5,0,0,5,0,5,0,0,0,0,0,5,1,0,5,1},
+				{1,0,0,5,0,0,5,0,5,0,5,0,0,0,0,5,5,1,4,1},
+				{1,0,5,0,0,5,0,5,0,0,0,5,0,0,0,5,5,4,1,1},
 				{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
 		};
 
@@ -109,7 +111,7 @@ public class GameManager{
 					case EMPTY:
 						break;
 					case WALL:
-						walls.add(new Wall(x,y));
+						walls.add(new Wall(x,y,false));
 						break;
 					case BOX:
 						boxes.add(new Box(x,y));
@@ -119,6 +121,9 @@ public class GameManager{
 						break;
 					case ENDZONE:
 						endzones.add(new EndZone(x,y));
+						break;
+					case BREAKABLE_WALL:
+						walls.add(new Wall(x,y,true));
 						break;
 				}
 			}
@@ -152,11 +157,16 @@ public class GameManager{
 
 			if(player!=null)//temporary if statement
 				player.act();
-
-			for(GameObject obj:gameObjects){
-				obj.act();
+			try{
+				for(GameObject obj:gameObjects){
+					obj.act();	
+				}
+			}catch(Exception e){
+				//this is responsible exception handling.
 			}
-
+			gameObjects.removeAll(removeList);
+			panel.removeGameObjects(removeList);
+			removeList.clear();
 			ended = true;
 			for(EndZone e:endZones){
 				e.act();
@@ -175,6 +185,23 @@ public class GameManager{
 			if(obj.getX() == x && obj.getY() == y)output = obj;
 		}
 		return output;
+	}
+	//returns a list of objects at a specified location
+	public ArrayList<GameObject> getObjectsAtLocation(int x,int y){
+		ArrayList<GameObject> output = new ArrayList<GameObject>();
+		for(GameObject obj:panel.getRenderList()){
+			if(obj.getX() == x && obj.getY() == y)output.add(obj);
+		}
+		return output;
+	}
+	public void removeObject(GameObject obj){
+		removeList.add(obj);
+		//gameObjects.remove(obj);
+		//panel.removeGameObject(obj);
+	}
+	public void addObject(GameObject obj){
+		gameObjects.add(obj);
+		panel.addGameObject(obj);
 	}
 	//used for other objects to get a reference to the active GameManager
 	public static GameManager getGameManager(){
@@ -380,6 +407,9 @@ public class GameManager{
 				break;
 			case KeyEvent.VK_P:
 				//paused = true;
+				break;
+			case KeyEvent.VK_SPACE:
+				player.setAction(Player.BOMB);
 				break;
 		}
 	}

@@ -7,10 +7,10 @@ public class Wall extends GameObject{
 	private boolean destructible;
 	
 	
-    public Wall (int x, int y/*, boolean destructible*/){
+    public Wall (int x, int y, boolean destructible){
     	
-    	super("Wall.png",x,y);
-    	//this.destructible = destructible;
+    	super("Wall"+(destructible?"_breakable":"")+".png",x,y);
+    	this.destructible = destructible;
     	//different image for destructible wall?
     	
     	
@@ -29,7 +29,7 @@ public class Wall extends GameObject{
 	public void destroy(){
 		//if bomb explosion radius includes wall position then destroy wall
 		if(this.destructible){
-			//GameManager.getGameManager().removeObject(this);
+			GameManager.getGameManager().removeObject(this);
 		}
 		
 	}
