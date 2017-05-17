@@ -4,31 +4,31 @@ import java.io.File;
 import java.io.IOException;
 
 public class Wall extends GameObject{
-	private boolean destructable;
+	private boolean destructible;
 	
 	
-    public Wall (int x, int y/*, boolean destructable*/){
+    public Wall (int x, int y/*, boolean destructible*/){
     	
     	super("Wall.png",x,y);
-    	//this.destructable = destructable;
-    	//different image for destructable wall?
+    	//this.destructible = destructible;
+    	//different image for destructible wall?
     	
     	
     }
 
 
 	public boolean isDestructable() {
-		return destructable;
+		return destructible;
 	}
 
 
-	public void setDestructable(boolean destructable) {
-		this.destructable = destructable;
+	public void setDestructable(boolean destructible) {
+		this.destructible = destructible;
 	}
 	
 	public void destroy(){
 		//if bomb explosion radius includes wall position then destroy wall
-		if(this.destructable){
+		if(this.destructible){
 			//GameManager.getGameManager().removeObject(this);
 		}
 		
