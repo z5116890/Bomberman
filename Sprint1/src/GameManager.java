@@ -45,7 +45,7 @@ public class GameManager{
 	private JFrame frame;
 	private PaintingPanel panel;
 	private float framerateMultiplier = 1;
-	
+
 	//leaderboard
 	private LeaderBoard leaderBoard;
 
@@ -270,9 +270,11 @@ public class GameManager{
 
 		//At this point we're already in the start menu, there's no other way to get here
 
+		//SPEED SLIDER
 		//Slider to control game speed - parameters are max, min and default values
 		JSlider speedSlider = new JSlider(JSlider.HORIZONTAL,
 				1, 5, 3);
+
 		speedSlider.setSize(new Dimension(100,500));
 		speedSlider.setBounds(310,295,100,50);
 		Font font = new Font("Impact", Font.PLAIN, 15);
@@ -286,19 +288,47 @@ public class GameManager{
 			public void stateChanged(ChangeEvent event) {
 				int value = speedSlider.getValue();
 				GameManager.getGameManager().setSpeed(0.1f + (value*value)/10f);
-				//System.out.println("Setting speed to " + value);
 			}
 		});
 
 		JLabel speedLabel = new JLabel("Game speed");
 		speedLabel.setFont(font);
 		speedLabel.setForeground(Color.white);
-		//Might be nice if this wasn't so hard coded...
 		speedLabel.setBounds(220,308,200,50);
 
 		//Add label and slider to background
 		background.add(speedSlider);
 		background.add(speedLabel);
+
+		//DIFFICULTY SLIDER
+		//Slider to control game difficulty - parameters are max, min and default values
+		JSlider difficultySlider = new JSlider(JSlider.HORIZONTAL,
+				1, 3, 2);
+
+		difficultySlider.setSize(new Dimension(100,500));
+		difficultySlider.setBounds(310,345,100,50);
+		difficultySlider.setFont(font);
+		difficultySlider.setForeground(Color.white);
+		difficultySlider.setMajorTickSpacing(1);
+		difficultySlider.setPaintLabels(true);
+		difficultySlider.setSnapToTicks(true);
+
+		difficultySlider.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent event) {
+				int value = difficultySlider.getValue();
+
+				System.out.println("Setting difficulty to " + value);
+			}
+		});
+
+		JLabel difficultyLabel = new JLabel("Difficulty");
+		difficultyLabel.setFont(font);
+		difficultyLabel.setForeground(Color.white);
+		difficultyLabel.setBounds(220,358,200,50);
+
+		//Add label and slider to background
+		background.add(difficultySlider);
+		background.add(difficultyLabel);
 
 		//make a back button so that we can go back to the normal options menu
 		//creating start button
@@ -308,6 +338,8 @@ public class GameManager{
 				background.remove(btnBack);
 				background.remove(speedSlider);
 				background.remove(speedLabel);
+				background.remove(difficultyLabel);
+				background.remove(difficultySlider);
 				addStartMenuButtons(background);
 				background.repaint();
 			}
@@ -318,7 +350,6 @@ public class GameManager{
 		btnBack.setBounds(220,225,200,50);
 
 		background.add(btnBack);
-
 	}
 	
 	/**
