@@ -276,7 +276,6 @@ public class GameManager{
 		//Slider to control game speed - parameters are max, min and default values
 		JSlider speedSlider = new JSlider(JSlider.HORIZONTAL,
 				1, 5, 3);
-
 		speedSlider.setSize(new Dimension(100,500));
 		speedSlider.setBounds(310,295,100,50);
 		Font font = new Font("Impact", Font.PLAIN, 15);
@@ -340,8 +339,9 @@ public class GameManager{
 		JButton btnStart = new JButton("Play Bomberman");
 		JButton btnHighScores = new JButton("Glorious scores");
 		JButton btnOptions = new JButton("Options");
+		JButton btnQuit = new JButton("Quit Bomberman");
 		//moved the constructors here to avoid error - GRANT
-		
+
 		//creating start button
 		btnStart.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -383,6 +383,7 @@ public class GameManager{
 				background.remove(btnHighScores);
 				background.remove(btnStart);
 				background.remove(btnOptions);
+				background.remove(btnQuit);
 				addOptionsMenuButtons(background);
 				background.repaint();
 			}
@@ -394,7 +395,42 @@ public class GameManager{
 
 		background.add(btnOptions);
 
+		//creating quit button
+		btnQuit.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
 
+				JDialog dialogQuit = new JDialog(frame, "Confirm defection", true);
+				dialogQuit.setLayout(new FlowLayout());
+				JButton btnYes = new JButton ("OK");
+				btnYes.addActionListener ( new ActionListener()
+				{
+					public void actionPerformed( ActionEvent e )
+					{
+						System.exit(0);
+					}
+				});
+				JButton btnNo = new JButton ("Cancel");
+				btnNo.addActionListener (new ActionListener()
+				{
+					public void actionPerformed( ActionEvent e )
+					{
+						dialogQuit.setVisible(false);
+					}
+				});
+
+				dialogQuit.add( new JLabel ("Do you really want to quit the Motherland?"));
+				dialogQuit.add(btnYes);
+				dialogQuit.add(btnNo);
+				dialogQuit.setBounds(170, 200, 300, 80);
+				dialogQuit.setVisible(true);
+			}
+		});
+		btnQuit.setFont(new Font("Impact", Font.PLAIN,16));
+		btnQuit.setForeground(new Color(208,17,8));
+		btnQuit.setSize(new Dimension(100,500));
+		btnQuit.setBounds(220,435,200,50);
+
+		background.add(btnQuit);
 	}
 
 	private void pauseGame(){
@@ -528,7 +564,7 @@ public class GameManager{
 		//creating background
 		BufferedImage img = null;
 		try{
-			img = ImageIO.read(new File("missile_square_640x640.jpg"));
+			img = ImageIO.read(new File("title_640x640.png"));
 		}catch(IOException e){
 			e.printStackTrace();
 		}
