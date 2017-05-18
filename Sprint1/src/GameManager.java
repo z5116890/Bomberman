@@ -45,10 +45,7 @@ public class GameManager{
 	private JFrame frame;
 	private PaintingPanel panel;
 	private float framerateMultiplier = 1;
-	//Start Menu stuff
-	private JTextField txtName;
-	private final ButtonGroup radios = new ButtonGroup();
-	private JLabel lblRadio = new JLabel("radio1");
+	
 	//leaderboard
 	private LeaderBoard leaderBoard;
 
@@ -237,7 +234,7 @@ public class GameManager{
 		//creating background
 		BufferedImage img = null;
 		try{
-			img = ImageIO.read(new File("missile_square_640x640.jpg"));
+			img = ImageIO.read(new File("title_640x640.png"));
 		}catch(IOException e){
 			e.printStackTrace();
 		}
