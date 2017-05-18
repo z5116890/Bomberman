@@ -39,6 +39,7 @@ public class GameManager{
 	private ArrayList<EndZone> endZones = new ArrayList<EndZone>();
 	private Player player;
 	private ArrayList<GameObject> removeList = new ArrayList<GameObject>();
+	private ScoreCounter scoreCounter;
 
 	//Swing stuff
 	private JFrame frame;
@@ -158,7 +159,7 @@ public class GameManager{
 		boolean ended = false;
 		while(!ended){
 			time = System.nanoTime();
-
+			this.displayLiveGameStats();
 			if(player!=null)//temporary if statement
 				player.act();
 			try{
@@ -620,19 +621,31 @@ public class GameManager{
 	
 	//function to display live game stats including bombs left, score, timer
 	private void displayLiveGameStats(){
+		JLabel statBox = new JLabel("");
+		statBox.setBounds(0, 0, 750, 30);
+		statBox.setBackground(Color.white);
+		//pauseBox.setBackground(new Color(0xCCCCCC));
+		statBox.setOpaque(false);
+		panel.add(statBox);
+		panel.repaint();
+		
 		JLabel bombsLeft = new JLabel("Bombs left: " + this.player.bombsLeft());
-		bombsLeft.setForeground(Color.black);
-		bombsLeft.setFont(new Font("Impact", Font.PLAIN,10));
-		//unsure of bounds cause dont know exact position to display stats
-		//bombsLeft.setBounds(70, 20, 200, 50);
+		bombsLeft.setForeground(Color.yellow);
+		bombsLeft.setFont(new Font("Impact", Font.PLAIN,15));
+		bombsLeft.setBounds(10, -10, 100, 50);
+		statBox.add(bombsLeft);
 		
 		JLabel timer = new JLabel("Time left: ");
-		timer.setForeground(Color.black);
-		timer.setFont(new Font("Impact", Font.PLAIN,10));
+		timer.setForeground(Color.yellow);
+		timer.setFont(new Font("Impact", Font.PLAIN,15));
+		timer.setBounds(250, -10, 100, 50);
+		statBox.add(timer);
 		
-		JLabel score = new JLabel("Score: ");
-		score.setForeground(Color.black);
-		score.setFont(new Font("Impact", Font.PLAIN,10));
+		JLabel score = new JLabel("Score: " );
+		score.setForeground(Color.yellow);
+		score.setFont(new Font("Impact", Font.PLAIN,15));
+		score.setBounds(500, -10, 100, 50);
+		statBox.add(score);
 	}
 
 	
