@@ -633,7 +633,7 @@ public class GameManager{
 		statBox.setBackground(Color.white);
 		statBox.setOpaque(false);
 		panel.add(statBox);
-		panel.repaint();
+		//panel.repaint();
 		
 		//calls player function bombsLeft to update num of bombs left
 		//doesnt show properly for some reason
