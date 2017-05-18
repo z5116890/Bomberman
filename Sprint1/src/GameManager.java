@@ -154,12 +154,19 @@ public class GameManager{
 		KeyInputListener keyListener2 = new KeyInputListener();
 		panel.addKeyListener(keyListener2);
 		panel.setFocusable(true);
+		
+		//stats to display at top
+		JLabel statBox = new JLabel("");
+		JLabel bombsLeft = new JLabel("");
+		JLabel timer = new JLabel("Time left: ");
+		JLabel score = new JLabel("Score: " );
+		
 		//frame.setSize(panel.getPreferredSize());
 		long time = 0;
 		boolean ended = false;
 		while(!ended){
+			this.displayLiveGameStats(statBox, bombsLeft, timer, score);
 			time = System.nanoTime();
-			this.displayLiveGameStats();
 			if(player!=null)//temporary if statement
 				player.act();
 			try{
@@ -620,33 +627,38 @@ public class GameManager{
 	}
 	
 	//function to display live game stats including bombs left, score, timer
-	private void displayLiveGameStats(){
-		JLabel statBox = new JLabel("");
+	private void displayLiveGameStats(JLabel statBox, JLabel bombsLeft, JLabel timer, JLabel score){
+		
 		statBox.setBounds(0, 0, 750, 30);
 		statBox.setBackground(Color.white);
-		//pauseBox.setBackground(new Color(0xCCCCCC));
 		statBox.setOpaque(false);
 		panel.add(statBox);
 		panel.repaint();
 		
-		JLabel bombsLeft = new JLabel("Bombs left: " + this.player.bombsLeft());
+		//calls player function bombsLeft to update num of bombs left
+		//doesnt show properly for some reason
+		
+		bombsLeft.setText("bombs away: " + player.bombsLeft());
 		bombsLeft.setForeground(Color.yellow);
 		bombsLeft.setFont(new Font("Impact", Font.PLAIN,15));
 		bombsLeft.setBounds(10, -10, 100, 50);
 		statBox.add(bombsLeft);
 		
-		JLabel timer = new JLabel("Time left: ");
-		timer.setForeground(Color.yellow);
+		
+		
+		
+		/*timer.setForeground(Color.yellow);
 		timer.setFont(new Font("Impact", Font.PLAIN,15));
 		timer.setBounds(250, -10, 100, 50);
 		statBox.add(timer);
 		
-		JLabel score = new JLabel("Score: " );
+		
 		score.setForeground(Color.yellow);
 		score.setFont(new Font("Impact", Font.PLAIN,15));
 		score.setBounds(500, -10, 100, 50);
-		statBox.add(score);
+		statBox.add(score);*/
 	}
+	
 
 	
 }
