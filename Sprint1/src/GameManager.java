@@ -617,6 +617,23 @@ public class GameManager{
 				background.add(btnBack);
 
 	}
+	
+	//function to display live game stats including bombs left, score, timer
+	private void displayLiveGameStats(){
+		JLabel bombsLeft = new JLabel("Bombs left: " + this.player.bombsLeft());
+		bombsLeft.setForeground(Color.black);
+		bombsLeft.setFont(new Font("Impact", Font.PLAIN,10));
+		//unsure of bounds cause dont know exact position to display stats
+		//bombsLeft.setBounds(70, 20, 200, 50);
+		
+		JLabel timer = new JLabel("Time left: ");
+		timer.setForeground(Color.black);
+		timer.setFont(new Font("Impact", Font.PLAIN,10));
+		
+		JLabel score = new JLabel("Score: ");
+		score.setForeground(Color.black);
+		score.setFont(new Font("Impact", Font.PLAIN,10));
+	}
 
 	
 }
