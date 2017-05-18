@@ -400,25 +400,23 @@ public class GameManager{
 	private void pauseGame(){
 
 		gamePaused = true;
-		System.out.println("paused");
 
-		//Make a box to hold the pause menu
-		JLabel pauseBox = new JLabel("");
-		pauseBox.setBounds(200, 170, 240, 300);
-		pauseBox.setBackground(Color.white);
-		//pauseBox.setBackground(new Color(0xCCCCCC));
-		pauseBox.setOpaque(true);
-		panel.add(pauseBox);
+		//Make semi-opaque black panel that covers screen to indicate game paused
+		JPanel semiOpaquePanel = new JPanel();
+		semiOpaquePanel.setBackground(new Color(000, 000, 000, 200));
+		semiOpaquePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 640, 640));
+		panel.add(semiOpaquePanel);
 		panel.repaint();
+		frame.pack();
 
 		//Make a label to let user know that the game is paused
 		JLabel lblPause = new JLabel("GAME PAUSED");
-		lblPause.setForeground(Color.darkGray);
-		lblPause.setFont(new Font("Impact", Font.PLAIN,20));
-		lblPause.setBounds(70, 20, 200, 50);
-		pauseBox.add(lblPause);
+		lblPause.setForeground(Color.white);
+		lblPause.setFont(new Font("Impact", Font.PLAIN,30));
+		lblPause.setBounds(240,155,200,50);
+		semiOpaquePanel.add(lblPause);
 
-		//Create buttons to put in box
+		//Create buttons
 		JButton btnResume = new JButton("Resume");
 		JButton btnQuit = new JButton("Quit");
 		JButton btnRestart = new JButton("Restart");
@@ -427,14 +425,14 @@ public class GameManager{
 		btnResume.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
 				unPauseGame();
-				panel.remove(pauseBox);
+				panel.remove(semiOpaquePanel);
 			}
 		});
 		btnResume.setFont(new Font("Impact", Font.PLAIN,16));
 		btnResume.setForeground(new Color(208,17,8));
-		btnResume.setBounds(20,90,200,50);
+		btnResume.setBounds(220,225,200,50);
 
-		pauseBox.add(btnResume);
+		semiOpaquePanel.add(btnResume);
 
 		//Restart button
 		btnRestart.addActionListener(new ActionListener(){
@@ -446,9 +444,9 @@ public class GameManager{
 		btnRestart.setFont(new Font("Impact", Font.PLAIN,16));
 		btnRestart.setForeground(new Color(208,17,8));
 		//btnQuit.setSize(new Dimension(100,500));
-		btnRestart.setBounds(20,160,200,50);
+		btnRestart.setBounds(220,295,200,50);
 
-		pauseBox.add(btnRestart);
+		semiOpaquePanel.add(btnRestart);
 
 		//Quit button
 		btnQuit.addActionListener(new ActionListener(){
@@ -459,10 +457,8 @@ public class GameManager{
 		});
 		btnQuit.setFont(new Font("Impact", Font.PLAIN,16));
 		btnQuit.setForeground(new Color(208,17,8));
-		//btnQuit.setSize(new Dimension(100,500));
-		btnQuit.setBounds(20,230,200,50);
-
-		pauseBox.add(btnQuit);
+		btnQuit.setBounds(220,365,200,50);
+		semiOpaquePanel.add(btnQuit);
 	}
 
 	public void startGame(){
