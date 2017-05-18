@@ -103,7 +103,9 @@ public class GameObject {
 	}
 
 	public void act(){
-		move();
+		if (!GameManager.isPaused()) {
+			move();
+		}
 	}
 
 	protected void move(){
