@@ -105,4 +105,11 @@ public class Player extends GameObject{
 		GameManager.getGameManager().addObject(bomb);
 		placedBombs++;
 	}
+	
+	//made function that returns how many bombs are left
+	//used to display on the top
+	public int bombsLeft(){
+		return (bombCount - placedBombs);
+	}
+	
 }
