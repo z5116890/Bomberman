@@ -647,7 +647,7 @@ public class GameManager{
 		
 		
 		
-		/*timer.setForeground(Color.yellow);
+		timer.setForeground(Color.yellow);
 		timer.setFont(new Font("Impact", Font.PLAIN,15));
 		timer.setBounds(250, -10, 100, 50);
 		statBox.add(timer);
@@ -656,7 +656,7 @@ public class GameManager{
 		score.setForeground(Color.yellow);
 		score.setFont(new Font("Impact", Font.PLAIN,15));
 		score.setBounds(500, -10, 100, 50);
-		statBox.add(score);*/
+		statBox.add(score);
 	}
 	
 
