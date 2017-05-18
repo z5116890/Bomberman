@@ -68,6 +68,7 @@ public class GameManager{
 	//Creates an instance of GameManager, does start screen, runs the game
 	public static void main(String args[]){
 		gm = new GameManager();
+		//gm.endGameMenu(); - so this works but otherwise loops or soemthing
 		gm.startMenu();
 		gm.runGame();
 	}
@@ -145,10 +146,12 @@ public class GameManager{
 	public void runGame(){
 		frame.add(panel);
 		frame.pack();
-		frame.addKeyListener(new KeyInputListener());
+		KeyInputListener keyListener1 = new KeyInputListener();
+		frame.addKeyListener(keyListener1);
 		frame.setFocusable(true);
 		frame.requestFocus();
-		panel.addKeyListener(new KeyInputListener());
+		KeyInputListener keyListener2 = new KeyInputListener();
+		panel.addKeyListener(keyListener2);
 		panel.setFocusable(true);
 		//frame.setSize(panel.getPreferredSize());
 		long time = 0;
@@ -177,7 +180,10 @@ public class GameManager{
 			//limits the frame rate
 			while(System.nanoTime()-time<(long)(1000000000L/(TARGET_FRAME_RATE*framerateMultiplier)));
 		}
-
+		//panel.removeKeyListener(keyListener2);
+		//frame.removeKeyListener(keyListener1);
+		frame.remove(panel);
+		GameManager.getGameManager().endGameMenu();
 	}
 	//returns the object at the specified grid location, if multiple objects are in the same place, it returns the one rendered last (seen ontop)
 	public GameObject getObjectAtLocation(int x,int y){
@@ -240,9 +246,6 @@ public class GameManager{
 		background.setVisible(true);
 
 		addStartMenuButtons(background);
-
-
-
 
 		frame.pack();
 		frame.setSize(640,640);
@@ -505,5 +508,116 @@ public class GameManager{
 	public void setSpeed(float multiplier){
 		framerateMultiplier = multiplier;
 	}
+	
+	private void endGameMenu(){
+		//playing music
+		Clip clip = null;
+		try{
+			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("anthem2.wav"));
+			clip = AudioSystem.getClip();
+			clip.open(audioInputStream);
+			clip.start();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+		//creating background
+		BufferedImage img = null;
+		try{
+			img = ImageIO.read(new File("missile_square_640x640.jpg"));
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		int width = (int)(img.getWidth()*((float)PaintingPanel.DEFAULT_WINDOW_SIZE/img.getHeight()));
+		Image dimg = img.getScaledInstance(width,PaintingPanel.DEFAULT_WINDOW_SIZE,Image.SCALE_SMOOTH);
+		ImageIcon imageIcon = new ImageIcon(dimg);
+		JLabel background = new JLabel(imageIcon);
+		background.setVisible(true);
+		background.setSize(PaintingPanel.DEFAULT_WINDOW_SIZE,PaintingPanel.DEFAULT_WINDOW_SIZE);
+
+		JPanel tempPanel = new JPanel();
+		frame.add(tempPanel);
+		tempPanel.add(background);
+		background.setVisible(true);
+
+		addEndGameMenuButtons(background);
+
+		frame.pack();
+		frame.setSize(640,640);
+		
+		while(!gameStarted)System.out.print("");
+		frame.remove(tempPanel);
+		clip.stop();
+		clip.close();
+
+	} //End Game Menu
+	
+	private void addEndGameMenuButtons(JLabel background) {
+				JLabel gameOverLabel = new JLabel("Game Over");
+				gameOverLabel.setFont(new Font("Impact", Font.PLAIN,16));
+				gameOverLabel.setForeground(Color.white);
+				gameOverLabel.setBounds(220,50,200,50);
+				background.add(gameOverLabel);
+				
+				JLabel ScoreLabel = new JLabel("Score");
+				ScoreLabel.setFont(new Font("Impact", Font.PLAIN,16));
+				ScoreLabel.setForeground(Color.white);
+				ScoreLabel.setBounds(220, 100, 200,50);
+				background.add(ScoreLabel);
+				//So not sure where to store the score but here is where it would go for this screen 
+				JLabel ScoreNumberLabel = new JLabel("10000");
+				ScoreNumberLabel.setFont(new Font("Impact", Font.PLAIN,16));
+				ScoreNumberLabel.setForeground(Color.white);
+				ScoreNumberLabel.setBounds(220, 150,200,50);
+				background.add(ScoreNumberLabel);
+				
+				JLabel inputTextLabel = new JLabel("Input Name");
+				inputTextLabel.setFont(new Font("Impact", Font.PLAIN,16));
+				inputTextLabel.setForeground(Color.white);
+				inputTextLabel.setBounds(220,200,200,50);
+				background.add(inputTextLabel);
+
+				JTextField textField = new JTextField();
+				textField.setFont(new Font("Impact", Font.PLAIN,16));
+				textField.setForeground(Color.black);
+				textField.setBounds(220,250,200,50);
+				background.add(textField);
+				
+				JLabel errorLabel = new JLabel("Must Enter Name");
+				errorLabel.setFont(new Font("Impact", Font.PLAIN,16));
+				errorLabel.setForeground(Color.red);
+				errorLabel.setBounds(220,300,200,50);
+				
+				JButton btnBack = new JButton("Back to main menu");
+				btnBack.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e) {
+						//You can get the name from here for the scoreboard 
+						String name = textField.getText();
+						if (name.isEmpty()) {
+							background.add(errorLabel);
+							background.repaint();
+						} else {
+							background.remove(btnBack); 
+							background.remove(gameOverLabel);
+							background.remove(ScoreLabel);
+							background.remove(ScoreNumberLabel);
+							background.remove(inputTextLabel);
+							background.remove(textField);
+							background.remove(errorLabel);
+							addStartMenuButtons(background);
+							background.repaint();
+						}
+					}
+				});
+				btnBack.setFont(new Font("Impact", Font.PLAIN,16));
+				btnBack.setForeground(new Color(208,17,8));
+				btnBack.setSize(new Dimension(100,500));
+				btnBack.setBounds(220,350,200,50);
+
+				background.add(btnBack);
+
+	}
+
+	
 }
 
