@@ -364,10 +364,10 @@ public class GameManager{
 	}
 
 	private void addStartMenuButtons(JLabel background){
-		JButton btnStart = new JButton("Play Bomberman");
+		JButton btnStart = new JButton("Play");
 		JButton btnHighScores = new JButton("Glorious scores");
-		JButton btnOptions = new JButton("Options");
-		JButton btnQuit = new JButton("Quit Bomberman");
+		JButton btnOptions = new JButton("Settings");
+		JButton btnQuit = new JButton("Quit");
 		//moved the constructors here to avoid error - GRANT
 
 		//creating start button
