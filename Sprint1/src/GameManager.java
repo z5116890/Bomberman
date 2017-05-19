@@ -364,7 +364,7 @@ public class GameManager{
 	}
 
 	private void addStartMenuButtons(JLabel background){
-		JButton btnStart = new JButton("Play");
+		JButton btnStart = new JButton("Start");
 		JButton btnHighScores = new JButton("Glorious scores");
 		JButton btnOptions = new JButton("Settings");
 		JButton btnQuit = new JButton("Quit");
