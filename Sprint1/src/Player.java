@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 
 public class Player extends GameObject{
 	public static final int BOMB = 5;
@@ -5,6 +6,8 @@ public class Player extends GameObject{
 	private int bombCount = 8;
 	private int placedBombs = 0;
 	private int explosionSize = 5;
+	private int deathTimer = 3;
+	private boolean dead = false;
 	public Player(int x, int y) {
 		super("Player_small.png", x, y);
 		speed = 4;
@@ -17,25 +20,25 @@ public class Player extends GameObject{
 		//see if anything is in the way ie box, wall
 		if(direction == DOWN){
 			GameObject obj = GameManager.getGameManager().getObjectAtLocation(gridX, gridY + 1);
-			if(obj == null || obj.interact(direction)){
+			if(obj == null || obj.interact(direction) || obj instanceof Enemy){
 				this.gridY++;
 				return true;
 			}
 		}else if(direction == UP){
 			GameObject obj = GameManager.getGameManager().getObjectAtLocation(gridX, gridY - 1);
-			if(obj == null || obj.interact(direction)){
+			if(obj == null || obj.interact(direction) || obj instanceof Enemy){
 				this.gridY--;
 				return true;
 			}
 		}else if(direction == LEFT){
 			GameObject obj = GameManager.getGameManager().getObjectAtLocation(gridX - 1, gridY);
-			if(obj == null || obj.interact(direction)){
+			if(obj == null || obj.interact(direction) || obj instanceof Enemy){
 				this.gridX--;
 				return true;
 			}
 		}else if(direction == RIGHT){
 			GameObject obj = GameManager.getGameManager().getObjectAtLocation(gridX + 1, gridY);
-			if(obj == null || obj.interact(direction)){
+			if(obj == null || obj.interact(direction) || obj instanceof Enemy){
 				this.gridX++;
 				return true;
 			}
@@ -47,7 +50,16 @@ public class Player extends GameObject{
 	
 	
 	public void act(){
-		if(nextAction != 0){
+		if(dead){
+			if(deathTimer--<0)die();
+		}
+		ArrayList<GameObject> objects = GameManager.getGameManager().getObjectsAtLocation(gridX, gridY);
+		for(GameObject obj:objects){
+			if(obj instanceof Explosion || obj instanceof Enemy){
+				dead = true;
+			}
+		} 
+		if(nextAction != 0 && !dead){
 			switch(nextAction){
 			case UP:case DOWN:case LEFT:case RIGHT:
 				interact(nextAction);
@@ -73,6 +85,9 @@ public class Player extends GameObject{
 		return true;
 	}
 	*/
+	private void die(){
+		GameManager.getGameManager().reset();
+	}
 	public void setAction(int action){
 		switch(action){
 		case UP:case DOWN: case LEFT: case RIGHT:

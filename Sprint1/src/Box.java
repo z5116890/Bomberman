@@ -20,7 +20,7 @@ public class Box extends GameObject{
 			dx = 1;
 		}
 		GameObject obj = GameManager.getGameManager().getObjectAtLocation(gridX + dx, gridY + dy);
-		if (obj == null || obj instanceof EndZone) {
+		if (obj == null || obj instanceof EndZone || obj instanceof Explosion) {
 			gridX += dx;
 			gridY += dy;
 			return true;

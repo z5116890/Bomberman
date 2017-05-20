@@ -80,8 +80,9 @@ public class Bomb extends GameObject{
 					break;
 			}
 		}
-		if(!placeExplosion)return true;
+		if(!placeExplosion)dir = 0;//return true;
 		boolean end = (dir != 0 && !continueExplosion);
+		
 		Explosion explosion = new Explosion(x,y,dir,end);
 		GameManager.getGameManager().addObject(explosion);
 		return true;

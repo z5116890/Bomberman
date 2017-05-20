@@ -14,6 +14,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
+import java.util.Random;
 //import java.util.
 public class GameManager{
 	public static final int MAP_SIZE = 640;
@@ -21,15 +22,19 @@ public class GameManager{
 	public static final int CELL_SIZE = MAP_SIZE/CELL_COUNT;//32
 	public static final int TARGET_FRAME_RATE = 32;
 
-	//map generation stuff
-	private static final int EMPTY = 0;
-	private static final int WALL = 1;
-	private static final int BOX = 2;
-	private static final int PLAYER = 3;
-	private static final int ENDZONE = 4;
-	private static final int BREAKABLE_WALL = 5;
-
-
+	//map creation stuff
+	public static final int EMPTY = 0;
+	public static final int WALL = 1;
+	public static final int BOX = 2;
+	public static final int PLAYER = 3;
+	public static final int ENDZONE = 4;
+	public static final int BREAKABLE_WALL = 5;
+	public static final int ENEMY = 6;
+	
+	
+	
+	
+	
 	private static GameManager gm; 
 
 	//Game State
@@ -40,7 +45,9 @@ public class GameManager{
 	private Player player;
 	private ArrayList<GameObject> removeList = new ArrayList<GameObject>();
 	private ScoreCounter scoreCounter;
-
+	private int difficulty = 2;
+	private int[][] map = null;
+	private boolean reset = false;
 	//Swing stuff
 	private JFrame frame;
 	private PaintingPanel panel;
@@ -61,7 +68,7 @@ public class GameManager{
 		frame.setSize(panel.getPreferredSize());
 		frame.setVisible(true);
 
-		createMap();
+		//createMap();
 	}
 	//Creates an instance of GameManager, does start screen, runs the game
 	public static void main(String args[]){
@@ -76,7 +83,14 @@ public class GameManager{
 	}
 	//generates a map and instantiates all the objects and adds them to their corresponding lists
 	private void createMap(){
-		int[][] map = {
+		map = new int[20][20];
+		for(int i = 0; i<20; i++){
+			map[0][i] = WALL;
+			map[i][0] = WALL;
+			map[19][i] = WALL;
+			map[i][19] = WALL;
+		}
+		/*= {//Example/Test map
 				{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
 				{1,0,0,0,0,0,0,5,5,5,0,0,0,0,0,0,0,0,0,1},
 				{1,0,3,0,5,5,0,2,2,2,0,0,0,0,0,5,5,0,0,1},
@@ -97,14 +111,79 @@ public class GameManager{
 				{1,0,0,5,0,0,5,0,5,0,5,0,0,0,0,5,5,1,4,1},
 				{1,0,5,0,0,5,0,5,0,0,0,5,0,0,0,5,5,4,1,1},
 				{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1}
-		};
-
+		};*/
+		//constructing a graph
+		Segment[] graph = new Segment[9];
+		for(int i = 0;i<9;i++){
+			graph[i] = new Segment();
+		}
+		graph[0].setConnections(null, graph[3], null, graph[1]);
+		graph[1].setConnections(null, graph[4], graph[0], graph[2]);
+		graph[2].setConnections(null, graph[5], graph[1], null);
+		graph[3].setConnections(graph[0], graph[6], null, graph[4]);
+		graph[4].setConnections(graph[1], graph[7], graph[3], graph[5]);
+		graph[5].setConnections(graph[2], graph[8], graph[4], null);
+		graph[6].setConnections(graph[3], null, null, graph[7]);
+		graph[7].setConnections(graph[4], null, graph[6], graph[8]);
+		graph[8].setConnections(graph[5], null, graph[7], null);
+		
+		graph[0].link(Segment.RIGHT);
+		graph[1].link(Segment.LEFT);
+		graph[0].link(Segment.DOWN);
+		graph[3].link(Segment.UP);
+		
+		//randomly link segments until all segments are reachable from the start (graph[0])
+		boolean finishedLinking = false;
+		while(!finishedLinking){
+			for(int i = 1;i < 9;i++){
+				graph[i].randomLink();
+			}
+			ArrayList<Segment> found = new ArrayList<Segment>();
+			ArrayList<Segment> toCheck = new ArrayList<Segment>();
+			found.add(graph[0]);
+			toCheck.add(graph[0]);
+			while(toCheck.size()>0){
+				Segment s = toCheck.get(0);
+				toCheck.remove(0);
+				ArrayList<Segment> links = s.getLinkedSegments();
+				for(Segment l:links){
+					if(!found.contains(l)){
+						found.add(l);
+						toCheck.add(l);
+					}
+				}
+			}
+			if(found.size()==9)finishedLinking = true;
+		}
+		//I'll make this random later
+		ArrayList<Integer> boxLocations = new ArrayList<Integer>();
+		Random rand = new Random();
+		while(boxLocations.size()<4){
+			int id = 1 + rand.nextInt(8);
+			if(!boxLocations.contains(id))boxLocations.add(id);
+		}
+		for(int i = 0;i<4;i++)graph[boxLocations.get(i)].giveBox();
+				
+		//Create array from graph
+		int[][] buffer = graph[0].getStartArray();
+		insertIntoMap(buffer,1,1);
+		for(int i = 1;i<9;i++){
+			int x = i%3;
+			int y = i/3;
+			buffer = graph[i].getMapArray();
+			insertIntoMap(buffer,1 + 6*x,1 + 6*y);
+		}
 		//Create map from array
+		createMapFromArray();
+
+	}
+	private void createMapFromArray(){
 		ArrayList<GameObject> walls = new ArrayList<GameObject>();
 		ArrayList<EndZone> endzones = new ArrayList<EndZone>();
 		ArrayList<GameObject> boxes = new ArrayList<GameObject>();
 		ArrayList<Player> players = new ArrayList<Player>();
-
+		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
+		
 		for(int y = 0;y<map.length;y++){
 			for(int x = 0;x<map[y].length;x++){
 				switch(map[y][x]){
@@ -125,23 +204,45 @@ public class GameManager{
 					case BREAKABLE_WALL:
 						walls.add(new Wall(x,y,true));
 						break;
+					case ENEMY:
+						enemies.add(new Enemy(x,y));
+						break;
 				}
 			}
 		}
 
 		gameObjects.addAll(walls);
 		gameObjects.addAll(boxes);
+		gameObjects.addAll(enemies);
 		endZones.addAll(endzones);
 		player = players.get(0);//there should be one and only one of these for now.
 
 		panel.addGameObjects(walls);
 		panel.addGameObjects(endZones);
 		panel.addGameObjects(boxes);
+		panel.addGameObjects(enemies);
 		panel.addGameObject(player);
-
+	}
+	private void insertIntoMap(int[][] section,int xStart,int yStart){
+		for(int y = 0; y<section.length; y++){
+			for(int x = 0; x<section[y].length;x++){
+				map[yStart + y][xStart + x] = section[y][x];
+			}
+		}
+	}
+	private void resetMap(){
+		panel.removeGameObjects(panel.getRenderList());
+		gameObjects.clear();
+		endZones.clear();
+		createMapFromArray();
+		reset = false;
+	}
+	public void reset(){
+		reset = true;
 	}
 	//all of the actual game is run in here, the method doesn't end until the game is over
 	public void runGame(){
+		createMap();
 		frame.add(panel);
 		frame.pack();
 		KeyInputListener keyListener1 = new KeyInputListener();
@@ -173,6 +274,7 @@ public class GameManager{
 			}catch(Exception e){
 				//this is responsible exception handling.
 			}
+			
 			gameObjects.removeAll(removeList);
 			panel.removeGameObjects(removeList);
 			removeList.clear();
@@ -181,6 +283,7 @@ public class GameManager{
 				e.act();
 				if(!e.getActive())ended = false;
 			}
+			if(reset)resetMap();
 			draw();
 			//limits the frame rate
 			while(System.nanoTime()-time<(long)(1000000000L/(TARGET_FRAME_RATE*framerateMultiplier)));
@@ -316,8 +419,8 @@ public class GameManager{
 		difficultySlider.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent event) {
 				int value = difficultySlider.getValue();
-
-				System.out.println("Setting difficulty to " + value);
+				GameManager.getGameManager().setDifficulty(value);
+				//System.out.println("Setting difficulty to " + value);
 			}
 		});
 
@@ -446,7 +549,7 @@ public class GameManager{
 					}
 				});
 
-				dialogQuit.add( new JLabel ("Do you really want to quit the Motherland?"));
+				dialogQuit.add( new JLabel ("Do you really want to leave the Motherland?"));
 				dialogQuit.add(btnYes);
 				dialogQuit.add(btnNo);
 				dialogQuit.setBounds(170, 200, 300, 80);
@@ -557,7 +660,7 @@ public class GameManager{
 					player.setAction(GameObject.RIGHT);
 				}
 				break;
-			case KeyEvent.VK_P:
+			case KeyEvent.VK_P:case KeyEvent.VK_ESCAPE:
 				if (gamePaused) {
 					//unPauseGame();
 					break;
@@ -566,6 +669,9 @@ public class GameManager{
 					pauseGame();
 					break;
 				}
+			case KeyEvent.VK_R:
+				reset = true;
+				break;
 			case KeyEvent.VK_SPACE:
 				if (!gamePaused) {
 					player.setAction(Player.BOMB);
@@ -719,7 +825,12 @@ public class GameManager{
 		statBox.add(score);
 	}
 	
-
+	public int getDifficulty(){
+		return difficulty;
+	}
+	public void setDifficulty(int value){
+		difficulty = value;
+	}
 	
 }
 

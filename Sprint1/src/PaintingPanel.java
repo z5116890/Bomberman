@@ -21,9 +21,12 @@ public class PaintingPanel extends JPanel {
 	}
 	public void paintComponent(Graphics g){//Might need to come back to this.
 		super.paintComponent(g);
-		
-		for(GameObject go:renderList){
-			g.drawImage(go.getImage(),go.getRealX(),go.getRealY(),null);
+		try{
+			for(GameObject go:renderList){
+				g.drawImage(go.getImage(),go.getRealX(),go.getRealY(),null);
+			}
+		}catch(Exception e){
+			
 		}
 	}
 	public void addGameObject(GameObject obj){

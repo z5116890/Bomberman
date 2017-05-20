@@ -1,6 +1,7 @@
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -40,9 +41,19 @@ public class Explosion extends GameObject{
 	}
 	public void act(){
 		super.act();
+		ArrayList<GameObject> objects = GameManager.getGameManager().getObjectsAtLocation(gridX, gridY);
+		for(GameObject obj:objects){
+			if(obj instanceof Box){
+				GameManager.getGameManager().removeObject(this);
+			}
+		}
 		if(++timer > DURATION){
 			GameManager.getGameManager().removeObject(this);
 		}
+	}
+	@Override
+	public boolean interact(int direction){
+		return true;
 	}
 	@Override
 	public BufferedImage getImage(){
