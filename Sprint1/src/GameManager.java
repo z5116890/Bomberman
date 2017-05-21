@@ -3,8 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -15,6 +14,8 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.util.Random;
+import java.util.Scanner;
+
 //import java.util.
 public class GameManager{
 	public static final int MAP_SIZE = 640;
@@ -30,12 +31,12 @@ public class GameManager{
 	public static final int ENDZONE = 4;
 	public static final int BREAKABLE_WALL = 5;
 	public static final int ENEMY = 6;
-	
-	
-	
-	
-	
-	private static GameManager gm; 
+
+
+
+
+
+	private static GameManager gm;
 
 	//Game State
 	private boolean gameStarted = false;
@@ -63,6 +64,7 @@ public class GameManager{
 
 		frame = new JFrame("Bomberman");
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setResizable(false);
 		//frame.add(panel);
 		//frame.pack();
 		frame.setSize(panel.getPreferredSize());
@@ -126,12 +128,12 @@ public class GameManager{
 		graph[6].setConnections(graph[3], null, null, graph[7]);
 		graph[7].setConnections(graph[4], null, graph[6], graph[8]);
 		graph[8].setConnections(graph[5], null, graph[7], null);
-		
+
 		graph[0].link(Segment.RIGHT);
 		graph[1].link(Segment.LEFT);
 		graph[0].link(Segment.DOWN);
 		graph[3].link(Segment.UP);
-		
+
 		//randomly link segments until all segments are reachable from the start (graph[0])
 		boolean finishedLinking = false;
 		while(!finishedLinking){
@@ -163,7 +165,7 @@ public class GameManager{
 			if(!boxLocations.contains(id))boxLocations.add(id);
 		}
 		for(int i = 0;i<4;i++)graph[boxLocations.get(i)].giveBox();
-				
+
 		//Create array from graph
 		int[][] buffer = graph[0].getStartArray();
 		insertIntoMap(buffer,1,1);
@@ -183,7 +185,7 @@ public class GameManager{
 		ArrayList<GameObject> boxes = new ArrayList<GameObject>();
 		ArrayList<Player> players = new ArrayList<Player>();
 		ArrayList<Enemy> enemies = new ArrayList<Enemy>();
-		
+
 		for(int y = 0;y<map.length;y++){
 			for(int x = 0;x<map[y].length;x++){
 				switch(map[y][x]){
@@ -252,13 +254,13 @@ public class GameManager{
 		KeyInputListener keyListener2 = new KeyInputListener();
 		panel.addKeyListener(keyListener2);
 		panel.setFocusable(true);
-		
+
 		//stats to display at top
 		JLabel statBox = new JLabel("");
 		JLabel bombsLeft = new JLabel("");
 		JLabel timer = new JLabel("Time left: ");
 		JLabel score = new JLabel("Score: " );
-		
+
 		//frame.setSize(panel.getPreferredSize());
 		long time = 0;
 		boolean ended = false;
@@ -269,12 +271,12 @@ public class GameManager{
 				player.act();
 			try{
 				for(GameObject obj:gameObjects){
-					obj.act();	
+					obj.act();
 				}
 			}catch(Exception e){
 				//this is responsible exception handling.
 			}
-			
+
 			gameObjects.removeAll(removeList);
 			panel.removeGameObjects(removeList);
 			removeList.clear();
@@ -454,7 +456,7 @@ public class GameManager{
 
 		background.add(btnBack);
 	}
-	
+
 	/**
 	 * Displays the current leaderboard
 	 * @param background
@@ -462,7 +464,7 @@ public class GameManager{
 	private void displayLeaderBoard(JLabel background) {
 		int spacing = 50;
 		for (String score: leaderBoard.getLeaderBoard()) {
-			
+
 		}
 	}
 
@@ -571,10 +573,17 @@ public class GameManager{
 		//Make semi-opaque black panel that covers screen to indicate game paused
 		JPanel semiOpaquePanel = new JPanel();
 		semiOpaquePanel.setBackground(new Color(000, 000, 000, 200));
+		semiOpaquePanel.setSize(new Dimension(640, 640));
 		semiOpaquePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 640, 640));
 		panel.add(semiOpaquePanel);
 		panel.repaint();
 		frame.pack();
+
+		addPauseMenuButtons(semiOpaquePanel);
+
+	}
+
+	private void addPauseMenuButtons(JPanel semiOpaquePanel){
 
 		//Make a label to let user know that the game is paused
 		JLabel lblPause = new JLabel("GAME PAUSED");
@@ -587,6 +596,7 @@ public class GameManager{
 		JButton btnResume = new JButton("Resume");
 		JButton btnQuit = new JButton("Quit");
 		JButton btnRestart = new JButton("Restart");
+		JButton btnHelp = new JButton("Help");
 
 		//Resume button
 		btnResume.addActionListener(new ActionListener(){
@@ -604,29 +614,100 @@ public class GameManager{
 		//Restart button
 		btnRestart.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent ev){
-
-				btnRestart.setForeground(new Color(0,0,255));
+				reset();
+				unPauseGame();
+				panel.remove(semiOpaquePanel);
 			}
 		});
 		btnRestart.setFont(new Font("Impact", Font.PLAIN,16));
 		btnRestart.setForeground(new Color(208,17,8));
-		//btnQuit.setSize(new Dimension(100,500));
 		btnRestart.setBounds(220,295,200,50);
-
 		semiOpaquePanel.add(btnRestart);
+
+		//Help button - gives game instructions etc.
+		btnHelp.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ev){
+
+				semiOpaquePanel.remove(btnResume);
+				semiOpaquePanel.remove(btnQuit);
+				semiOpaquePanel.remove(btnRestart);
+				semiOpaquePanel.remove(btnHelp);
+				semiOpaquePanel.remove(lblPause);
+				addPauseHelpMenu(semiOpaquePanel);
+			}
+		});
+		btnHelp.setFont(new Font("Impact", Font.PLAIN,16));
+		btnHelp.setForeground(new Color(208,17,8));
+		btnHelp.setBounds(220,365,200,50);
+		semiOpaquePanel.add(btnHelp);
 
 		//Quit button
 		btnQuit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent ev){
 
-				btnQuit.setForeground(new Color(0,0,255));
 			}
 		});
 		btnQuit.setFont(new Font("Impact", Font.PLAIN,16));
 		btnQuit.setForeground(new Color(208,17,8));
-		btnQuit.setBounds(220,365,200,50);
+		btnQuit.setBounds(220,435,200,50);
 		semiOpaquePanel.add(btnQuit);
 	}
+
+	private void addPauseHelpMenu(JPanel semiOpaquePanel){
+
+		//Make a label to indicate user is in help menu
+		JLabel lblPause = new JLabel("INSTRUCTIONS");
+		lblPause.setForeground(Color.white);
+		lblPause.setFont(new Font("Impact", Font.PLAIN,30));
+		lblPause.setBounds(240,155,250,50);
+		semiOpaquePanel.add(lblPause);
+
+		//Read help.txt into JLabel
+		JLabel lblHelpText = new JLabel();
+		String helpString = new String();
+		helpString+= "<html>";
+
+		//read source file
+		Scanner sc = null;
+		try {
+			sc = new Scanner(new FileReader("help.txt"));
+			while (sc.hasNextLine()){
+				String line = sc.nextLine();
+				helpString+=line;
+				helpString+="<br>";
+			}
+			helpString+="</html>";
+			lblHelpText.setText(helpString);
+
+		} catch (FileNotFoundException e){
+			System.out.println("Help file not found");
+			e.printStackTrace();
+		}
+
+		lblHelpText.setForeground(Color.white);
+		lblHelpText.setFont(new Font("Impact", Font.PLAIN,16));
+		//Why is it 150...
+		lblHelpText.setBounds(230,150,200,300);
+		semiOpaquePanel.add(lblHelpText);
+
+		//Make a button to go back to the pause menu
+		JButton btnBack = new JButton("Back");
+		btnBack.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ev){
+
+				//btnBack.setForeground(new Color(0,0,255));
+				semiOpaquePanel.remove(lblPause);
+				semiOpaquePanel.remove(btnBack);
+				semiOpaquePanel.remove(lblHelpText);
+				addPauseMenuButtons(semiOpaquePanel);
+			}
+		});
+		btnBack.setFont(new Font("Impact", Font.PLAIN,16));
+		btnBack.setForeground(new Color(208,17,8));
+		btnBack.setBounds(220,435,200,50);
+		semiOpaquePanel.add(btnBack);
+	}
+
 
 	public void startGame(){
 		gameStarted = true;
@@ -682,7 +763,7 @@ public class GameManager{
 	public void setSpeed(float multiplier){
 		framerateMultiplier = multiplier;
 	}
-	
+
 	private void endGameMenu(){
 		//playing music
 		Clip clip = null;
@@ -694,7 +775,7 @@ public class GameManager{
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-		
+
 		//creating background
 		BufferedImage img = null;
 		try{
@@ -718,119 +799,119 @@ public class GameManager{
 
 		frame.pack();
 		frame.setSize(640,640);
-		
+
 		while(!gameStarted)System.out.print("");
 		frame.remove(tempPanel);
 		clip.stop();
 		clip.close();
 
 	} //End Game Menu
-	
+
 	private void addEndGameMenuButtons(JLabel background) {
-				JLabel gameOverLabel = new JLabel("Game Over");
-				gameOverLabel.setFont(new Font("Impact", Font.PLAIN,16));
-				gameOverLabel.setForeground(Color.white);
-				gameOverLabel.setBounds(220,50,200,50);
-				background.add(gameOverLabel);
-				
-				JLabel ScoreLabel = new JLabel("Score");
-				ScoreLabel.setFont(new Font("Impact", Font.PLAIN,16));
-				ScoreLabel.setForeground(Color.white);
-				ScoreLabel.setBounds(220, 100, 200,50);
-				background.add(ScoreLabel);
-				//So not sure where to store the score but here is where it would go for this screen 
-				JLabel ScoreNumberLabel = new JLabel("10000");
-				ScoreNumberLabel.setFont(new Font("Impact", Font.PLAIN,16));
-				ScoreNumberLabel.setForeground(Color.white);
-				ScoreNumberLabel.setBounds(220, 150,200,50);
-				background.add(ScoreNumberLabel);
-				
-				JLabel inputTextLabel = new JLabel("Input Name");
-				inputTextLabel.setFont(new Font("Impact", Font.PLAIN,16));
-				inputTextLabel.setForeground(Color.white);
-				inputTextLabel.setBounds(220,200,200,50);
-				background.add(inputTextLabel);
+		JLabel gameOverLabel = new JLabel("Game Over");
+		gameOverLabel.setFont(new Font("Impact", Font.PLAIN,16));
+		gameOverLabel.setForeground(Color.white);
+		gameOverLabel.setBounds(220,50,200,50);
+		background.add(gameOverLabel);
 
-				JTextField textField = new JTextField();
-				textField.setFont(new Font("Impact", Font.PLAIN,16));
-				textField.setForeground(Color.black);
-				textField.setBounds(220,250,200,50);
-				background.add(textField);
-				
-				JLabel errorLabel = new JLabel("Must Enter Name");
-				errorLabel.setFont(new Font("Impact", Font.PLAIN,16));
-				errorLabel.setForeground(Color.red);
-				errorLabel.setBounds(220,300,200,50);
-				
-				JButton btnBack = new JButton("Back to main menu");
-				btnBack.addActionListener(new ActionListener(){
-					public void actionPerformed(ActionEvent e) {
-						//You can get the name from here for the scoreboard 
-						String name = textField.getText();
-						if (name.isEmpty()) {
-							background.add(errorLabel);
-							background.repaint();
-						} else {
-							background.remove(btnBack); 
-							background.remove(gameOverLabel);
-							background.remove(ScoreLabel);
-							background.remove(ScoreNumberLabel);
-							background.remove(inputTextLabel);
-							background.remove(textField);
-							background.remove(errorLabel);
-							addStartMenuButtons(background);
-							background.repaint();
-						}
-					}
-				});
-				btnBack.setFont(new Font("Impact", Font.PLAIN,16));
-				btnBack.setForeground(new Color(208,17,8));
-				btnBack.setSize(new Dimension(100,500));
-				btnBack.setBounds(220,350,200,50);
+		JLabel ScoreLabel = new JLabel("Score");
+		ScoreLabel.setFont(new Font("Impact", Font.PLAIN,16));
+		ScoreLabel.setForeground(Color.white);
+		ScoreLabel.setBounds(220, 100, 200,50);
+		background.add(ScoreLabel);
+		//So not sure where to store the score but here is where it would go for this screen
+		JLabel ScoreNumberLabel = new JLabel("10000");
+		ScoreNumberLabel.setFont(new Font("Impact", Font.PLAIN,16));
+		ScoreNumberLabel.setForeground(Color.white);
+		ScoreNumberLabel.setBounds(220, 150,200,50);
+		background.add(ScoreNumberLabel);
 
-				background.add(btnBack);
+		JLabel inputTextLabel = new JLabel("Input Name");
+		inputTextLabel.setFont(new Font("Impact", Font.PLAIN,16));
+		inputTextLabel.setForeground(Color.white);
+		inputTextLabel.setBounds(220,200,200,50);
+		background.add(inputTextLabel);
+
+		JTextField textField = new JTextField();
+		textField.setFont(new Font("Impact", Font.PLAIN,16));
+		textField.setForeground(Color.black);
+		textField.setBounds(220,250,200,50);
+		background.add(textField);
+
+		JLabel errorLabel = new JLabel("Must Enter Name");
+		errorLabel.setFont(new Font("Impact", Font.PLAIN,16));
+		errorLabel.setForeground(Color.red);
+		errorLabel.setBounds(220,300,200,50);
+
+		JButton btnBack = new JButton("Back to main menu");
+		btnBack.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				//You can get the name from here for the scoreboard
+				String name = textField.getText();
+				if (name.isEmpty()) {
+					background.add(errorLabel);
+					background.repaint();
+				} else {
+					background.remove(btnBack);
+					background.remove(gameOverLabel);
+					background.remove(ScoreLabel);
+					background.remove(ScoreNumberLabel);
+					background.remove(inputTextLabel);
+					background.remove(textField);
+					background.remove(errorLabel);
+					addStartMenuButtons(background);
+					background.repaint();
+				}
+			}
+		});
+		btnBack.setFont(new Font("Impact", Font.PLAIN,16));
+		btnBack.setForeground(new Color(208,17,8));
+		btnBack.setSize(new Dimension(100,500));
+		btnBack.setBounds(220,350,200,50);
+
+		background.add(btnBack);
 
 	}
-	
+
 	//function to display live game stats including bombs left, score, timer
 	private void displayLiveGameStats(JLabel statBox, JLabel bombsLeft, JLabel timer, JLabel score){
-		
+
 		statBox.setBounds(0, 0, 750, 30);
 		statBox.setBackground(Color.white);
 		statBox.setOpaque(false);
 		panel.add(statBox);
 		//panel.repaint();
-		
+
 		//calls player function bombsLeft to update num of bombs left
 		//doesnt show properly for some reason
-		
+
 		bombsLeft.setText("bombs away: " + player.bombsLeft());
 		bombsLeft.setForeground(Color.yellow);
 		bombsLeft.setFont(new Font("Impact", Font.PLAIN,15));
 		bombsLeft.setBounds(10, -10, 100, 50);
 		statBox.add(bombsLeft);
-		
-		
-		
-		
+
+
+
+
 		timer.setForeground(Color.yellow);
 		timer.setFont(new Font("Impact", Font.PLAIN,15));
 		timer.setBounds(250, -10, 100, 50);
 		statBox.add(timer);
-		
-		
+
+
 		score.setForeground(Color.yellow);
 		score.setFont(new Font("Impact", Font.PLAIN,15));
 		score.setBounds(500, -10, 100, 50);
 		statBox.add(score);
 	}
-	
+
 	public int getDifficulty(){
 		return difficulty;
 	}
 	public void setDifficulty(int value){
 		difficulty = value;
 	}
-	
+
 }
 
