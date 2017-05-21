@@ -462,6 +462,7 @@ public class GameManager{
 	 * @param background
 	 */
 	private void displayLeaderBoard(JLabel background) {
+		//back button
 		JButton btnBack = new JButton("Back to main menu");
 		btnBack.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
@@ -499,7 +500,6 @@ public class GameManager{
 		background.add(scoreJLabel);
 		
 		int spacing = 50;
-<<<<<<< HEAD
 		int rank = 1;
 		//display the names and the scores
 //		for (String nameScore: leaderBoard.getLeaderBoard()) {
@@ -527,11 +527,6 @@ public class GameManager{
 //			spacing += 50;
 //			rank += 1;
 //		}
-=======
-		for (String score: leaderBoard.getLeaderBoard()) {
-
-		}
->>>>>>> origin/master
 	}
 
 	private void addStartMenuButtons(JLabel background){
