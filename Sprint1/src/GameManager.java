@@ -32,8 +32,15 @@ public class GameManager{
 	public static final int BREAKABLE_WALL = 5;
 	public static final int ENEMY = 6;
 
-
-
+	//
+	private static final int START_MENU = 1;
+	private static final int RUN = 2;
+	private static final int SCORES = 3;
+	private static final int SETTINGS = 4;
+	private static final int ENDSCREEN = 5;
+	private static final int QUIT = 6;
+	private static int instruction = START_MENU;
+	
 
 
 	private static GameManager gm;
@@ -49,10 +56,12 @@ public class GameManager{
 	private int difficulty = 2;
 	private int[][] map = null;
 	private boolean reset = false;
+	private boolean quit = false;
 	//Swing stuff
 	private JFrame frame;
 	private PaintingPanel panel;
 	private float framerateMultiplier = 1;
+	
 
 	//leaderboard
 	private LeaderBoard leaderBoard;
@@ -75,9 +84,31 @@ public class GameManager{
 	//Creates an instance of GameManager, does start screen, runs the game
 	public static void main(String args[]){
 		gm = new GameManager();
+		while(instruction != QUIT){
+			switch(instruction){
+			case START_MENU:
+				gm.startMenu();
+				break;
+			case RUN:
+				gm.runGame();
+				break;
+			case SETTINGS:
+				
+				break;
+			case SCORES:
+				
+				break;
+			case ENDSCREEN:
+				gm.endGameMenu();
+				break;
+			}
+		}
+		/*
 		//gm.endGameMenu(); - so this works but otherwise loops or soemthing
 		gm.startMenu();
 		gm.runGame();
+		//gm.endGameMenu(); //- so this works but otherwise loops or soemthing
+		*/
 	}
 	//updates the screen image
 	private void draw(){
@@ -244,7 +275,9 @@ public class GameManager{
 	}
 	//all of the actual game is run in here, the method doesn't end until the game is over
 	public void runGame(){
+		quit = false;
 		createMap();
+		panel.setVisible(true);
 		frame.add(panel);
 		frame.pack();
 		KeyInputListener keyListener1 = new KeyInputListener();
@@ -265,18 +298,28 @@ public class GameManager{
 		long time = 0;
 		boolean ended = false;
 		while(!ended){
+			if(quit){
+				instruction = START_MENU;
+				gameObjects.clear();
+				panel.removeGameObjects(panel.getRenderList());
+				endZones.clear();
+				panel.setVisible(false);
+				return;
+			}
 			this.displayLiveGameStats(statBox, bombsLeft, timer, explosionSize);
 			time = System.nanoTime();
-			if(player!=null)//temporary if statement
-				player.act();
-			try{
-				for(GameObject obj:gameObjects){
-					obj.act();
-				}
-			}catch(Exception e){
-				//this is responsible exception handling.
-			}
 
+			if(!gamePaused){
+				if(player!=null)//temporary if statement
+					player.act();
+				try{
+					for(GameObject obj:gameObjects){
+						obj.act();
+					}
+				}catch(Exception e){
+					//this is responsible exception handling.
+				}
+			}
 			gameObjects.removeAll(removeList);
 			panel.removeGameObjects(removeList);
 			removeList.clear();
@@ -292,8 +335,12 @@ public class GameManager{
 		}
 		//panel.removeKeyListener(keyListener2);
 		//frame.removeKeyListener(keyListener1);
-		frame.remove(panel);
-		GameManager.getGameManager().endGameMenu();
+		//frame.remove(panel);
+		gameObjects.clear();
+		panel.removeGameObjects(panel.getRenderList());
+		endZones.clear();
+		panel.setVisible(false);
+		instruction = ENDSCREEN;
 	}
 	//returns the object at the specified grid location, if multiple objects are in the same place, it returns the one rendered last (seen ontop)
 	public GameObject getObjectAtLocation(int x,int y){
@@ -326,6 +373,7 @@ public class GameManager{
 	}
 
 	private void startMenu(){
+		gameStarted = false;
 		//playing music
 		Clip clip = null;
 		try{
@@ -538,7 +586,7 @@ public class GameManager{
 		//creating start button
 		btnStart.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e){
-
+				instruction = RUN;
 				GameManager.getGameManager().startGame();
 				btnStart.setForeground(new Color(0,0,255));
 			}
@@ -705,7 +753,9 @@ public class GameManager{
 		//Quit button
 		btnQuit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent ev){
-
+				quit = true;
+				unPauseGame();
+				panel.remove(semiOpaquePanel);
 			}
 		});
 		btnQuit.setFont(new Font("Impact", Font.PLAIN,16));
@@ -803,6 +853,7 @@ public class GameManager{
 				}
 				break;
 			case KeyEvent.VK_P:case KeyEvent.VK_ESCAPE:
+				if(instruction != RUN)return;
 				if (gamePaused) {
 					//unPauseGame();
 					break;
@@ -840,7 +891,7 @@ public class GameManager{
 		//creating background
 		BufferedImage img = null;
 		try{
-			img = ImageIO.read(new File("title_640x640.png"));
+			img = ImageIO.read(new File("end_square_640x640.png"));
 		}catch(IOException e){
 			e.printStackTrace();
 		}
@@ -860,12 +911,12 @@ public class GameManager{
 
 		frame.pack();
 		frame.setSize(640,640);
-
-		while(!gameStarted)System.out.print("");
+		while(instruction == ENDSCREEN)System.out.print("");
 		frame.remove(tempPanel);
 		clip.stop();
 		clip.close();
-
+		instruction = START_MENU;
+		
 	} //End Game Menu
 
 	private void addEndGameMenuButtons(JLabel background) {
@@ -920,8 +971,9 @@ public class GameManager{
 					background.remove(inputTextLabel);
 					background.remove(textField);
 					background.remove(errorLabel);
-					addStartMenuButtons(background);
+					//addStartMenuButtons(background);
 					background.repaint();
+					instruction = START_MENU;
 				}
 			}
 		});

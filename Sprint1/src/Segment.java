@@ -41,15 +41,15 @@ public class Segment {
 			{WAL, BWE, EMP, BWE, WAL, ANY},
 			{BWL, ENM, BWE, BWE, ANY, ANY},
 			{EMP, BWE, EMP, EMP, BWE, EMP},
-			{BWE, BWE, EMP, BOE, EMP, SWL},
+			{BWE, BWE, EMP, BOE, EMP, BWE},
 			{SWL, AWL, EMP, EMP, EMP, WAL},
-			{AWL, AWL, SWL, BWL, WAL, WAL}
+			{AWL, AWL, BWL, BWL, WAL, WAL}
 		};
 	private static final int[][] straightSection = {
 			{EMP, EMP, BWE, EMP, SWL, EMP},
 			{EMP, BOE, BWE, BWE, SWL, WAL},
 			{EMP, BWL, EMP, EMP, BWL, EMP},
-			{AWL, WAL, EMP, BWE, WAL, WAL},
+			{BWE, WAL, EMP, BWE, WAL, WAL},
 			{ENM, BWE, BWE, EMP, WAL, ANY},
 			{ANY, AWL, BWE, EMP, ANY, EMP}
 		};
@@ -62,7 +62,7 @@ public class Segment {
 			{ANY, WAL, EMP, BWE, BWE, SWL}
 		};
 	private static final int[][] twaySection = {
-			{SWL, BWL, AWL, AWL, SWL, SWL},
+			{SWL, BWL, BWE, BWE, SWL, SWL},
 			{ANY, BWL, ANY, EMP, EMP, AWL},
 			{BWE, BWE, EMP, BOE, BWE, BWE},
 			{EMP, BWE, BWE, EMP, EMP, BWE},
@@ -72,8 +72,8 @@ public class Segment {
 	private static final int[][] endSection = {
 			{SWL, WAL, EMP, EMP, WAL, SWL},
 			{SWL, ENM, EMP, EMP, ENM, SWL},
-			{AWL, EMP, BWE, BWE, BWL, SWL},
-			{WAL, ANY, BWE, BOE, EMP, AWL},
+			{BWE, EMP, BWE, BWE, BWL, BWE},
+			{BWE, ANY, BWE, BOE, EMP, BWE},
 			{WAL, ANY, BWL, EMP, EMP, AWL},
 			{AWL, SWL, WAL, WAL, SWL, AWL}
 		};
