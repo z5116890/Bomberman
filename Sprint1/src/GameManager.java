@@ -258,14 +258,14 @@ public class GameManager{
 		//stats to display at top
 		JLabel statBox = new JLabel("");
 		JLabel bombsLeft = new JLabel("");
-		JLabel timer = new JLabel("Time left: ");
-		JLabel score = new JLabel("Score: " );
+		JLabel timer = new JLabel("");
+		JLabel explosionSize = new JLabel("");
 
 		//frame.setSize(panel.getPreferredSize());
 		long time = 0;
 		boolean ended = false;
 		while(!ended){
-			this.displayLiveGameStats(statBox, bombsLeft, timer, score);
+			this.displayLiveGameStats(statBox, bombsLeft, timer, explosionSize);
 			time = System.nanoTime();
 			if(player!=null)//temporary if statement
 				player.act();
@@ -935,7 +935,7 @@ public class GameManager{
 	}
 
 	//function to display live game stats including bombs left, score, timer
-	private void displayLiveGameStats(JLabel statBox, JLabel bombsLeft, JLabel timer, JLabel score){
+	private void displayLiveGameStats(JLabel statBox, JLabel bombsLeft, JLabel timer, JLabel explosionSize){
 
 		statBox.setBounds(0, 0, 750, 30);
 		statBox.setBackground(Color.white);
@@ -946,25 +946,25 @@ public class GameManager{
 		//calls player function bombsLeft to update num of bombs left
 		//doesnt show properly for some reason
 
-		bombsLeft.setText("bombs away: " + player.bombsLeft());
+		bombsLeft.setText("bombs away: " + player.bombsLeft() + "/" + player.getBombCount());
 		bombsLeft.setForeground(Color.yellow);
 		bombsLeft.setFont(new Font("Impact", Font.PLAIN,15));
-		bombsLeft.setBounds(10, -10, 100, 50);
+		bombsLeft.setBounds(10, -10, 150, 50);
 		statBox.add(bombsLeft);
 
 
 
-
+		timer.setText("Time left: ");
 		timer.setForeground(Color.yellow);
 		timer.setFont(new Font("Impact", Font.PLAIN,15));
-		timer.setBounds(250, -10, 100, 50);
+		timer.setBounds(250, -10, 150, 50);
 		statBox.add(timer);
 
-
-		score.setForeground(Color.yellow);
-		score.setFont(new Font("Impact", Font.PLAIN,15));
-		score.setBounds(500, -10, 100, 50);
-		statBox.add(score);
+		explosionSize.setText("Explosion Size: " + player.getExplosionSize());
+		explosionSize.setForeground(Color.yellow);
+		explosionSize.setFont(new Font("Impact", Font.PLAIN,15));
+		explosionSize.setBounds(500, -10, 150, 50);
+		statBox.add(explosionSize);
 	}
 
 	public int getDifficulty(){
