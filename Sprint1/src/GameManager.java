@@ -326,7 +326,7 @@ public class GameManager{
 			ended = true;
 			for(EndZone e:endZones){
 				e.act();
-				if(!e.getActive())ended = false;
+				if(!e.getActive())ended = true;
 			}
 			if(reset)resetMap();
 			draw();
@@ -955,7 +955,7 @@ public class GameManager{
 		errorLabel.setForeground(Color.red);
 		errorLabel.setBounds(220,300,200,50);
 
-		JButton btnBack = new JButton("Back to main menu");
+		JButton btnBack = new JButton("Submit");
 		btnBack.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				//You can get the name from here for the scoreboard
