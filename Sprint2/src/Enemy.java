@@ -128,7 +128,7 @@ public class Enemy extends GameObject {
 		}
 		if(1+rand.nextInt(4)<=obstructionCount)return;
 		animCap = 7;
-		GameManager.getGameManager().addObject(new Wall(gridX,gridY,true));
+		GameManager.getGameManager().addObject(new Wall(gridX,gridY,true, 'N'));
 	}
 	private void tryMove(){
 		int r = rand.nextInt(4);

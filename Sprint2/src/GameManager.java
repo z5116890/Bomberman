@@ -35,6 +35,10 @@ public class GameManager{
 	public static final int ENDZONE = 4;
 	public static final int BREAKABLE_WALL = 5;
 	public static final int ENEMY = 6;
+	public static final int WALL_LEFT = 7;
+	public static final int WALL_RIGHT = 8;
+	public static final int WALL_CENTRE = 9;
+
 
 	//
 	private static final int START_MENU = 1;
@@ -126,6 +130,30 @@ public class GameManager{
 			map[i][0] = WALL;
 			map[19][i] = WALL;
 			map[i][19] = WALL;
+
+			//walls that will have labels on them
+			map [0][0] = WALL_LEFT;
+			map [0][1] = WALL_CENTRE;
+			map [0][2] = WALL_CENTRE;
+			map [0][3] = WALL_RIGHT;
+
+			map [0][16] = WALL_LEFT;
+			map [0][17] = WALL_CENTRE;
+			map [0][18] = WALL_CENTRE;
+			map [0][19] = WALL_RIGHT;
+
+			map [0][8] = WALL_LEFT;
+			map [0][9] = WALL_CENTRE;
+			map [0][10] = WALL_CENTRE;
+			map [0][11] = WALL_RIGHT;
+
+			map [19][0] = WALL_LEFT;
+			map [19][1] = WALL_CENTRE;
+			map [19][2] = WALL_RIGHT;
+
+			map [19][17] = WALL_LEFT;
+			map [19][18] = WALL_CENTRE;
+			map [19][19] = WALL_RIGHT;
 		}
 		/*= {//Example/Test map
 				{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1},
@@ -227,7 +255,16 @@ public class GameManager{
 					case EMPTY:
 						break;
 					case WALL:
-						walls.add(new Wall(x,y,false));
+						walls.add(new Wall(x,y,false, 'N'));
+						break;
+					case WALL_LEFT:
+						walls.add(new Wall(x,y,false, 'L'));
+						break;
+					case WALL_CENTRE:
+						walls.add(new Wall(x,y,false, 'C'));
+						break;
+					case WALL_RIGHT:
+						walls.add(new Wall(x,y,false, 'R'));
 						break;
 					case BOX:
 						boxes.add(new Box(x,y));
@@ -239,7 +276,7 @@ public class GameManager{
 						endzones.add(new EndZone(x,y));
 						break;
 					case BREAKABLE_WALL:
-						walls.add(new Wall(x,y,true));
+						walls.add(new Wall(x,y,true, 'N'));
 						break;
 					case ENEMY:
 						enemies.add(new Enemy(x,y));
@@ -298,11 +335,43 @@ public class GameManager{
 		JLabel timer = new JLabel("");
 		JLabel explosionSize = new JLabel("");
 
+		//Exit button to display at bottom
+		JButton btnEndGame = new JButton("Quit");
+		btnEndGame.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ev){
+				quit = true;
+			}
+		});
+		btnEndGame.setVisible(false);
+		btnEndGame.setFont(new Font("Impact", Font.PLAIN,15));
+		btnEndGame.setForeground(new Color(208,17,8));
+
+		//Pause button to display at bottom
+		JButton btnPause = new JButton("Pause");
+		btnPause.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent ev){
+				pauseGame();
+			}
+		});
+		btnPause.setVisible(false);
+		btnPause.setFont(new Font("Impact", Font.PLAIN,15));
+		btnPause.setForeground(new Color(208,17,8));
+
+
 		//frame.setSize(panel.getPreferredSize());
 		long time = 0;
 		boolean ended = false;
+
+		////So we don't keep redrawing the exit and pause buttons
+		//boolean firstRun = true;
+
 		while(!ended){
+
+			this.addBoardButtons(btnEndGame, btnPause);
+
 			if(quit){
+				panel.remove(btnEndGame);
+				panel.remove(btnPause);
 				instruction = START_MENU;
 				gameObjects.clear();
 				panel.removeGameObjects(panel.getRenderList());
@@ -314,6 +383,7 @@ public class GameManager{
 			time = System.nanoTime();
 
 			if(!gamePaused){
+
 				if(player!=null)//temporary if statement
 					player.act();
 				try{
@@ -324,13 +394,16 @@ public class GameManager{
 					//this is responsible exception handling.
 				}
 			}
+
 			gameObjects.removeAll(removeList);
 			panel.removeGameObjects(removeList);
 			removeList.clear();
 			ended = true;
 			for(EndZone e:endZones){
 				e.act();
-				if(!e.getActive())ended = false;
+				if(!e.getActive()) {
+					ended = false;
+				}
 			}
 			if(reset)resetMap();
 			draw();
@@ -340,8 +413,11 @@ public class GameManager{
 		//panel.removeKeyListener(keyListener2);
 		//frame.removeKeyListener(keyListener1);
 		//frame.remove(panel);
+
 		gameObjects.clear();
 		panel.removeGameObjects(panel.getRenderList());
+		panel.remove(btnEndGame);
+		panel.remove(btnPause);
 		endZones.clear();
 		panel.setVisible(false);
 		instruction = ENDSCREEN;
@@ -797,6 +873,7 @@ public class GameManager{
 		lblPause.setBounds(240,155,200,50);
 		semiOpaquePanel.add(lblPause);
 
+
 		//Create buttons
 		JButton btnResume = new JButton("Resume");
 		JButton btnQuit = new JButton("Quit");
@@ -1080,6 +1157,19 @@ public class GameManager{
 
 	}
 
+	private void addBoardButtons(JButton btnExit, JButton btnPause){
+		//Make a button to go back to the pause menu
+		btnExit.setVisible(true);
+		btnExit.setBounds(3,608,90,32);
+		panel.add(btnExit);
+
+		btnPause.setVisible(true);
+		btnPause.setBounds(550,608,90,32);
+		panel.add(btnPause);
+
+		panel.repaint();
+	}
+
 	//function to display live game stats including bombs left, score, timer
 	private void displayLiveGameStats(JLabel statBox, JLabel bombsLeft, JLabel timer, JLabel explosionSize){
 
@@ -1092,25 +1182,25 @@ public class GameManager{
 		//calls player function bombsLeft to update num of bombs left
 		//doesnt show properly for some reason
 
-		bombsLeft.setText("bombs away: " + player.bombsLeft() + "/" + player.getBombCount());
+		bombsLeft.setText("Bombs Away: " + player.bombsLeft() + "/" + player.getBombCount());
 		bombsLeft.setForeground(Color.yellow);
 		bombsLeft.setFont(new Font("Impact", Font.PLAIN,15));
 		bombsLeft.setBounds(10, -10, 150, 50);
 		statBox.add(bombsLeft);
 
-
-
-		timer.setText("Time left: ");
+		timer.setText("Time Left: ");
 		timer.setForeground(Color.yellow);
 		timer.setFont(new Font("Impact", Font.PLAIN,15));
-		timer.setBounds(250, -10, 150, 50);
+		timer.setBounds(263, -10, 150, 50);
 		statBox.add(timer);
 
 		explosionSize.setText("Explosion Size: " + player.getExplosionSize());
 		explosionSize.setForeground(Color.yellow);
 		explosionSize.setFont(new Font("Impact", Font.PLAIN,15));
-		explosionSize.setBounds(500, -10, 150, 50);
+		explosionSize.setBounds(523, -10, 150, 50);
 		statBox.add(explosionSize);
+
+
 	}
 
 	public int getDifficulty(){
