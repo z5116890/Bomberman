@@ -14,6 +14,7 @@ public class LeaderBoard {
 	private static final int MAX_SCORES = 5;
 	
 	public LeaderBoard() {
+		highScores = new ArrayList<String>();
 		checkIfExists();
 		readFile();
 	}
@@ -67,20 +68,26 @@ public class LeaderBoard {
 	 * 			break out of loop
 	 * @param score
 	 */
-	public void checkScores(int score) {
+	public void checkScores(String name, int score) {
 		int pos = 0;
 		for (String highScore: highScores) {
 			if (score > Integer.parseInt((highScore.split(":")[1]))) {
-				String name = JOptionPane.showInputDialog("You set a new high score. What is your name?");
 				String newHighScore = name + ":" + score;
-				highScores.add(pos, newHighScore);
-				if (highScores.size() > MAX_SCORES) {
-					highScores.remove(highScores.size()-1);
+				if (highScores.size() < MAX_SCORES) { //if arraylist has less than 5 scores
+					highScores.add(pos, newHighScore); //simply add
+				} else { //else it has 5 or more
+					highScores.add(pos, newHighScore); //add
+					highScores.remove(highScores.size()-1); //we must remove the last score
 				}
-				break;
+				return;
 			}
 			pos++;
 		}
+		if (highScores.size() < MAX_SCORES) { //if less than 5 scores and also not higher than any of scores
+			String newHighScore = name + ":" + score; //we can still add! to end
+			highScores.add(pos, newHighScore);
+		}
+		
 	}
 	
 	/**
