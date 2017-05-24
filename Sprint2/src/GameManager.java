@@ -49,7 +49,8 @@ public class GameManager{
 	private static final int QUIT = 6;
 	private static int instruction = START_MENU;
 
-
+	public static final int GAME_DURATION = 300;
+	private static final long DELAY_DURATION = 15*1000000000L;
 
 	private static GameManager gm;
 
@@ -65,6 +66,8 @@ public class GameManager{
 	private int[][] map = null;
 	private boolean reset = false;
 	private boolean quit = false;
+	private long startTime = 0;
+	
 	//Swing stuff
 	private JFrame frame;
 	private PaintingPanel panel;
@@ -191,12 +194,13 @@ public class GameManager{
 		graph[6].setConnections(graph[3], null, null, graph[7]);
 		graph[7].setConnections(graph[4], null, graph[6], graph[8]);
 		graph[8].setConnections(graph[5], null, graph[7], null);
-
+		
+		/*
 		graph[0].link(Segment.RIGHT);
 		graph[1].link(Segment.LEFT);
 		graph[0].link(Segment.DOWN);
 		graph[3].link(Segment.UP);
-
+		*/
 		//randomly link segments until all segments are reachable from the start (graph[0])
 		boolean finishedLinking = false;
 		while(!finishedLinking){
@@ -220,19 +224,21 @@ public class GameManager{
 			}
 			if(found.size()==9)finishedLinking = true;
 		}
-		//I'll make this random later
-		ArrayList<Integer> boxLocations = new ArrayList<Integer>();
+		//creating boxes, endzones and the player
+		ArrayList<Integer> locations = new ArrayList<Integer>();
 		Random rand = new Random();
-		while(boxLocations.size()<4){
-			int id = 1 + rand.nextInt(8);
-			if(!boxLocations.contains(id))boxLocations.add(id);
+		while(locations.size()<3+difficulty*2){
+			int id = rand.nextInt(9);
+			if(!locations.contains(id))locations.add(id);
 		}
-		for(int i = 0;i<4;i++)graph[boxLocations.get(i)].giveBox();
-
+		for(int i = 0;i<1+difficulty;i++)graph[locations.get(i)].setSpecialType(BOX);
+		for(int i = 1+difficulty;i<(1+difficulty)*2;i++)graph[locations.get(i)].setSpecialType(ENDZONE);
+		graph[locations.get((1+difficulty)*2)].setSpecialType(PLAYER);
+		
 		//Create array from graph
-		int[][] buffer = graph[0].getStartArray();
-		insertIntoMap(buffer,1,1);
-		for(int i = 1;i<9;i++){
+		int[][] buffer;// = graph[0].getStartArray();
+		//insertIntoMap(buffer,1,1);
+		for(int i = 0;i<9;i++){
 			int x = i%3;
 			int y = i/3;
 			buffer = graph[i].getMapArray();
@@ -364,7 +370,7 @@ public class GameManager{
 
 		////So we don't keep redrawing the exit and pause buttons
 		//boolean firstRun = true;
-
+		startTime = System.nanoTime();
 		while(!ended){
 
 			this.addBoardButtons(btnEndGame, btnPause);
@@ -1001,7 +1007,12 @@ public class GameManager{
 	public static boolean isPaused() {
 		return gamePaused;
 	}
-
+	public int getTime(){
+		return GAME_DURATION - (int)((System.nanoTime() - startTime)/1000000000);
+	}
+	public void delay(){
+		startTime += DELAY_DURATION;
+	}
 	public void keyPressed(int keyCode){
 		switch(keyCode){
 			case KeyEvent.VK_UP:
@@ -1092,6 +1103,7 @@ public class GameManager{
 	} //End Game Menu
 
 	private void addEndGameMenuButtons(JLabel background) {
+		int score = getTime()*difficulty;
 		JLabel gameOverLabel = new JLabel("Game Over");
 		gameOverLabel.setFont(new Font("Impact", Font.PLAIN,16));
 		gameOverLabel.setForeground(Color.white);
@@ -1104,7 +1116,7 @@ public class GameManager{
 		ScoreLabel.setBounds(220, 100, 200,50);
 		background.add(ScoreLabel);
 		//So not sure where to store the score but here is where it would go for this screen
-		JLabel ScoreNumberLabel = new JLabel("10000");
+		JLabel ScoreNumberLabel = new JLabel(""+score);
 		ScoreNumberLabel.setFont(new Font("Impact", Font.PLAIN,16));
 		ScoreNumberLabel.setForeground(Color.white);
 		ScoreNumberLabel.setBounds(220, 150,200,50);
@@ -1136,6 +1148,7 @@ public class GameManager{
 					background.add(errorLabel);
 					background.repaint();
 				} else {
+					System.out.println("Player: "+name+" had score: "+score);
 					background.remove(btnBack);
 					background.remove(gameOverLabel);
 					background.remove(ScoreLabel);
@@ -1188,8 +1201,16 @@ public class GameManager{
 		bombsLeft.setFont(new Font("Impact", Font.PLAIN,15));
 		bombsLeft.setBounds(10, -10, 150, 50);
 		statBox.add(bombsLeft);
-
-		timer.setText("Time Left: ");
+		
+		String time = "";
+		int t = getTime();
+		if(t>=60){
+			time = "" + t/60 + ":";
+			if(t%60 < 10)time += "0";
+			time += t%60 + "";
+		}
+		else time = "" + t;
+		timer.setText("Time Left: "+time);
 		timer.setForeground(Color.yellow);
 		timer.setFont(new Font("Impact", Font.PLAIN,15));
 		timer.setBounds(263, -10, 150, 50);

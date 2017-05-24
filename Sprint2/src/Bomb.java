@@ -41,6 +41,7 @@ public class Bomb extends GameObject{
 		GameManager.getGameManager().removeObject(this);
 	}
 	public boolean placeExplosion(int x,int y,int dir,int size){
+		ArrayList<GameObject> toDestroy = new ArrayList<GameObject>();//If an explosion is made it will destroy everything in here
 		boolean placeExplosion = true;
 		ArrayList<GameObject> objects = GameManager.getGameManager().getObjectsAtLocation(x,y);
 		for(GameObject obj : objects){
@@ -59,9 +60,14 @@ public class Bomb extends GameObject{
 			else if(obj instanceof Bomb && dir != 0){
 				((Bomb)obj).explode(dir);
 				return true;
+			}else if(obj instanceof Item){ 
+				toDestroy.add(obj);
 			}else if(obj instanceof Explosion){
 				placeExplosion = false;
 			}
+		}
+		for(GameObject obj:toDestroy){
+			GameManager.getGameManager().removeObject(obj);
 		}
 		boolean continueExplosion = false;
 		if(size > 0){

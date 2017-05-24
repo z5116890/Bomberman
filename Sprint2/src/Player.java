@@ -3,9 +3,9 @@ import java.util.ArrayList;
 public class Player extends GameObject{
 	public static final int BOMB = 5;
 	private int nextAction = 0;
-	private int bombCount = 8;
+	private int bombCount = 1;
 	private int placedBombs = 0;
-	private int explosionSize = 5;
+	private int explosionSize = 1;
 	private int deathTimer = 3;
 	private boolean dead = false;
 	public Player(int x, int y) {
@@ -57,6 +57,19 @@ public class Player extends GameObject{
 		for(GameObject obj:objects){
 			if(obj instanceof Explosion || obj instanceof Enemy){
 				dead = true;
+			}else if(obj instanceof Item){
+				switch(((Item)obj).getType()){
+				case Item.BOMB:
+					bombCount++;
+					break;
+				case Item.EXPLOSION:
+					explosionSize++;
+					break;
+				case Item.TIME:
+					GameManager.getGameManager().delay();
+					break;
+				}
+				GameManager.getGameManager().removeObject(obj);
 			}
 		} 
 		if(nextAction != 0 && !dead){
