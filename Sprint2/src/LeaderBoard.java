@@ -24,7 +24,7 @@ public class LeaderBoard {
 	 * 		if it doesnt, creates one
 	 */
 	public void checkIfExists(){
-		File highScoresFile = new File("leaderboard.dat");
+		File highScoresFile = new File("leaderboard.txt");
 		if (!highScoresFile.exists()) {
 			try {
 				highScoresFile.createNewFile();
@@ -44,12 +44,13 @@ public class LeaderBoard {
 		try {
 			read = new FileReader(file);
 			reader = new BufferedReader(read);
-
-			while (reader.readLine() != null) {
-				String score = reader.readLine();
-				highScores.add(score);
+			String line = null;
+			
+			while ((line = reader.readLine()) != null) {
+				highScores.add(line);
 			}
 		} catch (Exception e){
+			e.printStackTrace();
 		} finally {
 			if (reader != null) {
 				try {
@@ -71,7 +72,7 @@ public class LeaderBoard {
 	public void checkScores(String name, int score) {
 		int pos = 0;
 		for (String highScore: highScores) {
-			if (score > Integer.parseInt((highScore.split(":")[1]))) {
+			if (score > Integer.parseInt(highScore.split(":")[1])) {
 				String newHighScore = name + ":" + score;
 				if (highScores.size() < MAX_SCORES) { //if arraylist has less than 5 scores
 					highScores.add(pos, newHighScore); //simply add

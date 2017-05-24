@@ -698,32 +698,33 @@ public class GameManager{
 
 		int spacing = 50;
 		int rank = 1;
-		//display the names and the scores
-//		for (String nameScore: leaderBoard.getLeaderBoard()) {
-//
-//			JLabel rankLabel = new JLabel(rank);
-//			rankLabel.setFont(new Font("Impact", Font.PLAIN,16));
-//			rankLabel.setForeground(Color.white);
-//			rankLabel.setSize(new Dimension(100,500));
-//			rankLabel.setBounds(100,200+spacing,200,50);
-//
-//			String name = nameScore.split(":")[0];
-//			JLabel nameLabel = new JLabel(name);
-//			nameLabel.setFont(new Font("Impact", Font.PLAIN,16));
-//			nameLabel.setForeground(new Color(208,17,8));
-//			nameLabel.setSize(new Dimension(100,500));
-//			nameLabel.setBounds(300,200+spacing,200,50);
-//
-//			int score = Integer.parseInt(nameScore.split(":")[1]);
-//			JLabel scoreLabel = new JLabel(score);
-//			scoreLabel.setFont(new Font("Impact", Font.PLAIN,16));
-//			scoreLabel.setForeground(new Color(208,17,8));
-//			scoreLabel.setSize(new Dimension(100,500));
-//			scoreLabel.setBounds(500,200+spacing,200,50);
-//
-//			spacing += 50;
-//			rank += 1;
-//		}
+		for (String nameScore: leaderBoard.getLeaderBoard()) {
+			JLabel rankLabel = new JLabel(Integer.toString(rank));
+			rankLabel.setFont(new Font("Impact", Font.PLAIN,16));
+			rankLabel.setForeground(Color.white);
+			rankLabel.setSize(new Dimension(100,500));
+			rankLabel.setBounds(100,200+spacing,200,50);
+			background.add(rankLabel);
+			
+			String name = nameScore.split(":")[0];
+			JLabel nameLabel = new JLabel(name);
+			nameLabel.setFont(new Font("Impact", Font.PLAIN,16));
+			nameLabel.setForeground(Color.white);
+			nameLabel.setSize(new Dimension(100,500));
+			nameLabel.setBounds(300,200+spacing,200,50);
+			background.add(nameLabel);
+
+			int score = Integer.parseInt(nameScore.split(":")[1]);
+			JLabel scoreLabel = new JLabel(Integer.toString(score));
+			scoreLabel.setFont(new Font("Impact", Font.PLAIN,16));
+			scoreLabel.setForeground(Color.white);
+			scoreLabel.setSize(new Dimension(100,500));
+			scoreLabel.setBounds(500,200+spacing,200,50);
+			background.add(scoreLabel);
+
+			spacing += 50;
+			rank += 1;
+		}
 	}
 
 	private void addStartMenuButtons(JLabel background){
