@@ -28,14 +28,14 @@ public class GameObject {
 		//Assuming realX/realY are the pixel positions, of the upper left corner
 		this.realX = x*GameManager.CELL_SIZE;
 		this.realY = y*GameManager.CELL_SIZE;
-		
+
 		try{
-            image = ImageIO.read(new File(imageName));
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+			image = ImageIO.read(new File(imageName));
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 	}
-	
+
 	public GameObject(int x, int y){
 
 		this.gridX = x;
@@ -67,11 +67,14 @@ public class GameObject {
 
 	//Setters
 
-	public void setImage(BufferedImage image) {
+	public void setImage(String filename) {
 
-		//if the screen is 640x640px, and there are 20x20cells, the images should be 32x32px I'm guessing
-
-		this.image = image;
+		//if the screen is 640x640px & there are 20x20cells, images should be 32x32px
+		try{
+			this.image = ImageIO.read(new File(filename));
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 	}
 
 	public void setGridX(int gridX) {
@@ -136,9 +139,6 @@ public class GameObject {
 			} else {
 				this.realX -= pixelsToMove;
 			}
-
-			//this.realX += Math.abs(xDisplace) > this.speed ? this.speed * Math.signum(xDisplace) : xDisplace;
-			//this is a translation of Daniel's C# version ^^^
 		}
 
 		//displacement in pixels
@@ -167,10 +167,6 @@ public class GameObject {
 			} else {
 				this.realY -= pixelsToMove;
 			}
-
-			//this.realY += Math.abs(xDisplace) > this.speed ? this.speed * Math.signum(xDisplace) : xDisplace;
-			//this is a translation of Daniel's C# version ^^^
-			
 		}
 	}
 
