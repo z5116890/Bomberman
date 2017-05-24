@@ -70,7 +70,6 @@ public class GameManager{
 	private PaintingPanel panel;
 	private float framerateMultiplier = 1;
 
-
 	//leaderboard
 	private LeaderBoard leaderBoard;
 
@@ -399,6 +398,7 @@ public class GameManager{
 			panel.removeGameObjects(removeList);
 			removeList.clear();
 			ended = true;
+			
 			for(EndZone e:endZones){
 				e.act();
 				if(!e.getActive()) {
@@ -1087,6 +1087,11 @@ public class GameManager{
 		frame.remove(tempPanel);
 		clip.stop();
 		clip.close();
+		
+		//check if high score, rewrite text file if it is
+//		if (leaderBoard.checkScores(name, scoreCounter.getScoreCounter())) 
+//			leaderBoard.writeScores();
+		
 		instruction = START_MENU;
 
 	} //End Game Menu

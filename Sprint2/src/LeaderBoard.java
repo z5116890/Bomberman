@@ -69,7 +69,7 @@ public class LeaderBoard {
 	 * 			break out of loop
 	 * @param score
 	 */
-	public void checkScores(String name, int score) {
+	public boolean checkScores(String name, int score) {
 		int pos = 0;
 		for (String highScore: highScores) {
 			if (score > Integer.parseInt(highScore.split(":")[1])) {
@@ -80,15 +80,16 @@ public class LeaderBoard {
 					highScores.add(pos, newHighScore); //add
 					highScores.remove(highScores.size()-1); //we must remove the last score
 				}
-				return;
+				return true;
 			}
 			pos++;
 		}
 		if (highScores.size() < MAX_SCORES) { //if less than 5 scores and also not higher than any of scores
 			String newHighScore = name + ":" + score; //we can still add! to end
 			highScores.add(pos, newHighScore);
+			return true;
 		}
-		
+		return false;
 	}
 	
 	/**
