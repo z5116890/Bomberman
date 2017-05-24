@@ -1,3 +1,5 @@
+import com.sun.java.swing.plaf.motif.MotifBorders;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -5,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
+import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -13,6 +16,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicBorders;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -40,7 +44,7 @@ public class GameManager{
 	private static final int ENDSCREEN = 5;
 	private static final int QUIT = 6;
 	private static int instruction = START_MENU;
-	
+
 
 
 	private static GameManager gm;
@@ -61,7 +65,7 @@ public class GameManager{
 	private JFrame frame;
 	private PaintingPanel panel;
 	private float framerateMultiplier = 1;
-	
+
 
 	//leaderboard
 	private LeaderBoard leaderBoard;
@@ -86,21 +90,21 @@ public class GameManager{
 		gm = new GameManager();
 		while(instruction != QUIT){
 			switch(instruction){
-			case START_MENU:
-				gm.startMenu();
-				break;
-			case RUN:
-				gm.runGame();
-				break;
-			case SETTINGS:
-				
-				break;
-			case SCORES:
-				
-				break;
-			case ENDSCREEN:
-				gm.endGameMenu();
-				break;
+				case START_MENU:
+					gm.startMenu();
+					break;
+				case RUN:
+					gm.runGame();
+					break;
+				case SETTINGS:
+
+					break;
+				case SCORES:
+
+					break;
+				case ENDSCREEN:
+					gm.endGameMenu();
+					break;
 			}
 		}
 		/*
@@ -326,7 +330,7 @@ public class GameManager{
 			ended = true;
 			for(EndZone e:endZones){
 				e.act();
-				if(!e.getActive())ended = true;
+				if(!e.getActive())ended = false;
 			}
 			if(reset)resetMap();
 			draw();
@@ -418,10 +422,9 @@ public class GameManager{
 	 * Create the options menu buttons, add main settings buttons back on return
 	 * Precondition: the settings buttons have already been removed
 	 * @param background - the main image in the menu
+	 * @pre user is in main start menu when function is called
 	 */
 	private void addOptionsMenuButtons(JLabel background){
-
-		//At this point we're already in the start menu, there's no other way to get here
 
 		//SPEED SLIDER
 		//Slider to control game speed - parameters are max, min and default values
@@ -429,7 +432,7 @@ public class GameManager{
 				1, 5, 3);
 
 		speedSlider.setSize(new Dimension(100,500));
-		speedSlider.setBounds(310,295,100,50);
+		speedSlider.setBounds(310,270,100,50);
 		Font font = new Font("Impact", Font.PLAIN, 15);
 		speedSlider.setFont(font);
 		speedSlider.setForeground(Color.white);
@@ -447,7 +450,7 @@ public class GameManager{
 		JLabel speedLabel = new JLabel("Game speed");
 		speedLabel.setFont(font);
 		speedLabel.setForeground(Color.white);
-		speedLabel.setBounds(220,308,200,50);
+		speedLabel.setBounds(220,283,200,50);
 
 		//Add label and slider to background
 		background.add(speedSlider);
@@ -459,7 +462,7 @@ public class GameManager{
 				1, 3, 2);
 
 		difficultySlider.setSize(new Dimension(100,500));
-		difficultySlider.setBounds(310,345,100,50);
+		difficultySlider.setBounds(310,320,100,50);
 		difficultySlider.setFont(font);
 		difficultySlider.setForeground(Color.white);
 		difficultySlider.setMajorTickSpacing(1);
@@ -477,7 +480,7 @@ public class GameManager{
 		JLabel difficultyLabel = new JLabel("Difficulty");
 		difficultyLabel.setFont(font);
 		difficultyLabel.setForeground(Color.white);
-		difficultyLabel.setBounds(220,358,200,50);
+		difficultyLabel.setBounds(220,333,200,50);
 
 		//Add label and slider to background
 		background.add(difficultySlider);
@@ -500,10 +503,80 @@ public class GameManager{
 		btnBack.setFont(new Font("Impact", Font.PLAIN,16));
 		btnBack.setForeground(new Color(208,17,8));
 		btnBack.setSize(new Dimension(100,500));
-		btnBack.setBounds(220,225,200,50);
+		btnBack.setBounds(220,200,200,50);
 
 		background.add(btnBack);
 	}
+
+	private void addInstructionsMenu(JLabel background){
+
+		//TextArea to display instructions
+		JTextArea helpTextArea = new JTextArea("");
+		helpTextArea.setOpaque(true);
+		helpTextArea.setLineWrap(true);
+		helpTextArea.setWrapStyleWord(true);
+		helpTextArea.setForeground(Color.black);
+		helpTextArea.setBounds(140,210,360,200);
+		helpTextArea.setEditable(false);
+		helpTextArea.setBorder(new LineBorder(Color.white, 10, true));
+		helpTextArea.setBackground(Color.white);
+		//helpTextArea.setVisible(true);
+		background.add(helpTextArea);
+
+		JScrollPane scroll = new JScrollPane(helpTextArea);
+		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		scroll.setBounds(140,210,360,200);
+		scroll.setVisible(true);
+		background.add(scroll);
+
+		//This label just makes the rounded border for the TextArea
+		JLabel frameLabel = new JLabel("");
+		frameLabel.setOpaque(false);
+		frameLabel.setBounds(130,200,380,220);
+		frameLabel.setBorder(new LineBorder(Color.white, 10, true));
+		background.add(frameLabel);
+
+		//Make a back button so user can go back to the normal options menu
+		JButton btnBack = new JButton("Back to main menu");
+		btnBack.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				background.remove(btnBack);
+				background.remove(helpTextArea);
+				background.remove(frameLabel);
+				background.remove(scroll);
+				addStartMenuButtons(background);
+				background.repaint();
+			}
+		});
+		btnBack.setFont(new Font("Impact", Font.PLAIN,16));
+		btnBack.setForeground(new Color(208,17,8));
+		btnBack.setSize(new Dimension(100,500));
+		btnBack.setBounds(220,440,200,50);
+
+		background.add(btnBack);
+
+		//read file containing instructions
+		helpTextArea.setFont(new Font("Courier", Font.PLAIN,16));
+		Scanner sc = null;
+		try {
+			sc = new Scanner(new FileReader("instructions.txt"));
+			while (sc.hasNextLine()){
+				String line = sc.nextLine();
+				helpTextArea.append(line);
+				helpTextArea.append("\n");
+			}
+		} catch (FileNotFoundException e){
+			System.out.println("Help file not found");
+			e.printStackTrace();
+		}
+
+		//Makes sure that the scrollbar starts at the top, not the bottom
+		helpTextArea.setCaretPosition(0);
+	}
+
+
+
+
 
 	/**
 	 * Displays the current leaderboard
@@ -524,7 +597,7 @@ public class GameManager{
 		btnBack.setSize(new Dimension(100,500));
 		btnBack.setBounds(220,150,200,50);
 		background.add(btnBack);
-		
+
 		//"Rank" label and "Name" label and "Score" label
 		JLabel rankJLabel = new JLabel("Rank");
 		rankJLabel.setFont(new Font("Impact", Font.PLAIN,16));
@@ -532,46 +605,46 @@ public class GameManager{
 		rankJLabel.setSize(new Dimension(100,500));
 		rankJLabel.setBounds(100,200,200,50);
 		background.add(rankJLabel);
-		
+
 		JLabel nameJLabel = new JLabel("Name");
 		nameJLabel.setFont(new Font("Impact", Font.PLAIN,16));
 		nameJLabel.setForeground(Color.white);
 		nameJLabel.setSize(new Dimension(100,500));
 		nameJLabel.setBounds(300,200,200,50);
 		background.add(nameJLabel);
-		
+
 		JLabel scoreJLabel = new JLabel("Score");
 		scoreJLabel.setFont(new Font("Impact", Font.PLAIN,16));
 		scoreJLabel.setForeground(Color.white);
 		scoreJLabel.setSize(new Dimension(100,500));
 		scoreJLabel.setBounds(500,200,200,50);
 		background.add(scoreJLabel);
-		
+
 		int spacing = 50;
 		int rank = 1;
 		//display the names and the scores
 //		for (String nameScore: leaderBoard.getLeaderBoard()) {
-//			
+//
 //			JLabel rankLabel = new JLabel(rank);
 //			rankLabel.setFont(new Font("Impact", Font.PLAIN,16));
 //			rankLabel.setForeground(Color.white);
 //			rankLabel.setSize(new Dimension(100,500));
 //			rankLabel.setBounds(100,200+spacing,200,50);
-//		
+//
 //			String name = nameScore.split(":")[0];
 //			JLabel nameLabel = new JLabel(name);
 //			nameLabel.setFont(new Font("Impact", Font.PLAIN,16));
 //			nameLabel.setForeground(new Color(208,17,8));
 //			nameLabel.setSize(new Dimension(100,500));
 //			nameLabel.setBounds(300,200+spacing,200,50);
-//			
+//
 //			int score = Integer.parseInt(nameScore.split(":")[1]);
 //			JLabel scoreLabel = new JLabel(score);
 //			scoreLabel.setFont(new Font("Impact", Font.PLAIN,16));
 //			scoreLabel.setForeground(new Color(208,17,8));
 //			scoreLabel.setSize(new Dimension(100,500));
 //			scoreLabel.setBounds(500,200+spacing,200,50);
-//			
+//
 //			spacing += 50;
 //			rank += 1;
 //		}
@@ -582,6 +655,7 @@ public class GameManager{
 		JButton btnHighScores = new JButton("Glorious scores");
 		JButton btnOptions = new JButton("Settings");
 		JButton btnQuit = new JButton("Quit");
+		JButton btnInstructions = new JButton("Instructions");
 
 		//creating start button
 		btnStart.addActionListener(new ActionListener(){
@@ -594,7 +668,7 @@ public class GameManager{
 		btnStart.setFont(new Font("Impact", Font.PLAIN,16));
 		btnStart.setForeground(new Color(208,17,8));
 		btnStart.setSize(new Dimension(100,500));
-		btnStart.setBounds(220,225,200,50);
+		btnStart.setBounds(220,200,200,50);
 
 		background.add(btnStart);
 
@@ -606,15 +680,15 @@ public class GameManager{
 				background.remove(btnStart);
 				background.remove(btnOptions);
 				background.remove(btnQuit);
+				background.remove(btnInstructions);
 				displayLeaderBoard(background);
-				//btnHighScores.setForeground(new Color(0,0,255));
 				background.repaint();
 			}
 		});
 		btnHighScores.setFont(new Font("Impact", Font.PLAIN,16));
 		btnHighScores.setForeground(new Color(208,17,8));
 		btnHighScores.setSize(new Dimension(100,500));
-		btnHighScores.setBounds(220,295,200,50);
+		btnHighScores.setBounds(220,260,200,50);
 
 		background.add(btnHighScores);
 
@@ -626,6 +700,7 @@ public class GameManager{
 				background.remove(btnStart);
 				background.remove(btnOptions);
 				background.remove(btnQuit);
+				background.remove(btnInstructions);
 				addOptionsMenuButtons(background);
 				background.repaint();
 			}
@@ -633,9 +708,29 @@ public class GameManager{
 		btnOptions.setFont(new Font("Impact", Font.PLAIN,16));
 		btnOptions.setForeground(new Color(208,17,8));
 		btnOptions.setSize(new Dimension(100,500));
-		btnOptions.setBounds(220,365,200,50);
+		btnOptions.setBounds(220,320,200,50);
 
 		background.add(btnOptions);
+
+		//creating instructions button
+		btnInstructions.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+
+				background.remove(btnHighScores);
+				background.remove(btnStart);
+				background.remove(btnOptions);
+				background.remove(btnQuit);
+				background.remove(btnInstructions);
+				addInstructionsMenu(background);
+				background.repaint();
+			}
+		});
+		btnInstructions.setFont(new Font("Impact", Font.PLAIN,16));
+		btnInstructions.setForeground(new Color(208,17,8));
+		btnInstructions.setSize(new Dimension(100,500));
+		btnInstructions.setBounds(220,380,200,50);
+
+		background.add(btnInstructions);
 
 		//creating quit button
 		btnQuit.addActionListener(new ActionListener(){
@@ -664,13 +759,14 @@ public class GameManager{
 				dialogQuit.add(btnYes);
 				dialogQuit.add(btnNo);
 				dialogQuit.setBounds(170, 200, 300, 80);
+				dialogQuit.setLocationRelativeTo(frame);
 				dialogQuit.setVisible(true);
 			}
 		});
 		btnQuit.setFont(new Font("Impact", Font.PLAIN,16));
 		btnQuit.setForeground(new Color(208,17,8));
 		btnQuit.setSize(new Dimension(100,500));
-		btnQuit.setBounds(220,435,200,50);
+		btnQuit.setBounds(220,440,200,50);
 
 		background.add(btnQuit);
 	}
@@ -797,7 +893,6 @@ public class GameManager{
 
 		lblHelpText.setForeground(Color.white);
 		lblHelpText.setFont(new Font("Impact", Font.PLAIN,16));
-		//Why is it 150...
 		lblHelpText.setBounds(230,150,200,300);
 		semiOpaquePanel.add(lblHelpText);
 
@@ -806,7 +901,6 @@ public class GameManager{
 		btnBack.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent ev){
 
-				//btnBack.setForeground(new Color(0,0,255));
 				semiOpaquePanel.remove(lblPause);
 				semiOpaquePanel.remove(btnBack);
 				semiOpaquePanel.remove(lblHelpText);
@@ -916,7 +1010,7 @@ public class GameManager{
 		clip.stop();
 		clip.close();
 		instruction = START_MENU;
-		
+
 	} //End Game Menu
 
 	private void addEndGameMenuButtons(JLabel background) {
