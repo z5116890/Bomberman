@@ -1106,7 +1106,7 @@ public class GameManager{
 		frame.add(tempPanel);
 		tempPanel.add(background);
 		background.setVisible(true);
-
+		
 		addEndGameMenuButtons(background);
 
 		frame.pack();
@@ -1115,10 +1115,6 @@ public class GameManager{
 		frame.remove(tempPanel);
 		clip.stop();
 		clip.close();
-		
-		//check if high score, rewrite text file if it is
-//		if (leaderBoard.checkScores(name, scoreCounter.getScoreCounter())) 
-//			leaderBoard.writeScores();
 		
 		instruction = START_MENU;
 
@@ -1160,16 +1156,36 @@ public class GameManager{
 		errorLabel.setForeground(Color.red);
 		errorLabel.setBounds(220,300,200,50);
 
-		JButton btnBack = new JButton("Submit");
-		btnBack.addActionListener(new ActionListener(){
+		JButton submitBtn = new JButton("Submit");
+		submitBtn.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				//You can get the name from here for the scoreboard
 				String name = textField.getText();
+				
+				JButton btnBack = new JButton("Back to main menu");
+				btnBack.addActionListener(new ActionListener(){
+					public void actionPerformed(ActionEvent e){
+						instruction = START_MENU;
+					}
+				});
+				btnBack.setFont(new Font("Impact", Font.PLAIN,16));
+				btnBack.setForeground(new Color(208,17,8));
+				btnBack.setSize(new Dimension(100,500));
+				btnBack.setBounds(220,300,200,50);
+				
+				JLabel notifyPlayer = new JLabel();
+				notifyPlayer.setFont(new Font("Impact", Font.PLAIN,24));
+				notifyPlayer.setForeground(Color.white);
+				notifyPlayer.setBounds(150,250,400,50);
+				
+				//check leaderboard scores
+				
 				if (name.isEmpty()) {
 					background.add(errorLabel);
 					background.repaint();
-				} else {
-					System.out.println("Player: "+name+" had score: "+score);
+				} else if (leaderBoard.checkScores(name,score,difficulty)) {
+					leaderBoard.writeScores();
+					
 					background.remove(btnBack);
 					background.remove(gameOverLabel);
 					background.remove(ScoreLabel);
@@ -1177,18 +1193,33 @@ public class GameManager{
 					background.remove(inputTextLabel);
 					background.remove(textField);
 					background.remove(errorLabel);
-					//addStartMenuButtons(background);
+					background.remove(submitBtn);
+					notifyPlayer.setText("Congratulations " + name + ", it is a high score!");					
+					background.add(notifyPlayer);
+					background.add(btnBack);
 					background.repaint();
-					instruction = START_MENU;
+				} else {
+					background.remove(btnBack);
+					background.remove(gameOverLabel);
+					background.remove(ScoreLabel);
+					background.remove(ScoreNumberLabel);
+					background.remove(inputTextLabel);
+					background.remove(textField);
+					background.remove(errorLabel);
+					background.remove(submitBtn);
+					notifyPlayer.setText("Sorry " + name + ", it is not a high score");
+					background.add(notifyPlayer);
+					background.add(btnBack);
+					background.repaint();
 				}
 			}
 		});
-		btnBack.setFont(new Font("Impact", Font.PLAIN,16));
-		btnBack.setForeground(new Color(208,17,8));
-		btnBack.setSize(new Dimension(100,500));
-		btnBack.setBounds(220,350,200,50);
+		submitBtn.setFont(new Font("Impact", Font.PLAIN,16));
+		submitBtn.setForeground(new Color(208,17,8));
+		submitBtn.setSize(new Dimension(100,500));
+		submitBtn.setBounds(220,350,200,50);
 
-		background.add(btnBack);
+		background.add(submitBtn);
 
 	}
 
