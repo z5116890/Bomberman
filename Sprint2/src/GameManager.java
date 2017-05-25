@@ -1275,23 +1275,23 @@ public class GameManager{
 		statBox.add(explosionSize);
 		
 		//icons
-		BufferedImage img = null;
+		BufferedImage timerImg = null;
 		BufferedImage bomb = null;
 		BufferedImage nuclear = null;
 		try{
-			img = ImageIO.read(new File("Item_3.png"));
+			timerImg = ImageIO.read(new File("Item_3.png"));
 			bomb = ImageIO.read(new File("Item_1.png"));
 			nuclear = ImageIO.read(new File("Item_2.png"));
 		}catch(IOException e){
 			e.printStackTrace();
 		}
 		
-		Image dimg = img.getScaledInstance(30,25,10);
-		ImageIcon imageIcon = new ImageIcon(dimg);
-		JLabel bombIcon = new JLabel(imageIcon);
-		bombIcon.setVisible(true);
-		bombIcon.setBounds(0,-10,520,50);
-		statBox.add(bombIcon);
+		Image dTime = timerImg.getScaledInstance(30,25,10);
+		ImageIcon imageIcon = new ImageIcon(dTime);
+		JLabel timeIcon = new JLabel(imageIcon);
+		timeIcon.setVisible(true);
+		timeIcon.setBounds(0,-10,520,50);
+		statBox.add(timeIcon);
 		
 		
 		
