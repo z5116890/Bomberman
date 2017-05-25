@@ -6,7 +6,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -61,12 +64,13 @@ public class GameManager{
 	private ArrayList<EndZone> endZones = new ArrayList<EndZone>();
 	private Player player;
 	private ArrayList<GameObject> removeList = new ArrayList<GameObject>();
-	private ScoreCounter scoreCounter;
+	//private ScoreCounter scoreCounter;
 	private int difficulty = 2;
 	private int[][] map = null;
 	private boolean reset = false;
 	private boolean quit = false;
 	private long startTime = 0;
+	private int score = 0;
 	
 	//Swing stuff
 	private JFrame frame;
@@ -399,7 +403,7 @@ public class GameManager{
 					//this is responsible exception handling.
 				}
 			}
-
+			
 			gameObjects.removeAll(removeList);
 			panel.removeGameObjects(removeList);
 			removeList.clear();
@@ -416,10 +420,8 @@ public class GameManager{
 			//limits the frame rate
 			while(System.nanoTime()-time<(long)(1000000000L/(TARGET_FRAME_RATE*framerateMultiplier)));
 		}
-		//panel.removeKeyListener(keyListener2);
-		//frame.removeKeyListener(keyListener1);
-		//frame.remove(panel);
-
+		score = getTime()*difficulty;
+        //System.out.println(score);
 		gameObjects.clear();
 		panel.removeGameObjects(panel.getRenderList());
 		panel.remove(btnEndGame);
@@ -1123,7 +1125,6 @@ public class GameManager{
 	} //End Game Menu
 
 	private void addEndGameMenuButtons(JLabel background) {
-		int score = getTime()*difficulty;
 		JLabel gameOverLabel = new JLabel("Game Over");
 		gameOverLabel.setFont(new Font("Impact", Font.PLAIN,16));
 		gameOverLabel.setForeground(Color.white);
