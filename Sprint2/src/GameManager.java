@@ -1199,7 +1199,7 @@ public class GameManager{
 		bombsLeft.setText("Bombs Away: " + player.bombsLeft() + "/" + player.getBombCount());
 		bombsLeft.setForeground(Color.yellow);
 		bombsLeft.setFont(new Font("Impact", Font.PLAIN,15));
-		bombsLeft.setBounds(10, -10, 150, 50);
+		bombsLeft.setBounds(35, -10, 150, 50);
 		statBox.add(bombsLeft);
 		
 		String time = "";
@@ -1213,14 +1213,59 @@ public class GameManager{
 		timer.setText("Time Left: "+time);
 		timer.setForeground(Color.yellow);
 		timer.setFont(new Font("Impact", Font.PLAIN,15));
-		timer.setBounds(263, -10, 150, 50);
+		timer.setBounds(280, -10, 150, 50);
 		statBox.add(timer);
-
+		
 		explosionSize.setText("Explosion Size: " + player.getExplosionSize());
 		explosionSize.setForeground(Color.yellow);
 		explosionSize.setFont(new Font("Impact", Font.PLAIN,15));
 		explosionSize.setBounds(523, -10, 150, 50);
 		statBox.add(explosionSize);
+		
+		//icons
+		BufferedImage img = null;
+		try{
+			img = ImageIO.read(new File("Item_3.png"));
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		
+		Image dimg = img.getScaledInstance(30,25,10);
+		ImageIcon imageIcon = new ImageIcon(dimg);
+		JLabel bombIcon = new JLabel(imageIcon);
+		bombIcon.setVisible(true);
+		bombIcon.setBounds(0,-10,520,50);
+		statBox.add(bombIcon);
+		
+		BufferedImage bomb = null;
+		try{
+			bomb = ImageIO.read(new File("Item_1.png"));
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		
+		Image dbomb = bomb.getScaledInstance(30,25,10);
+		ImageIcon iconBomb = new ImageIcon(dbomb);
+		JLabel bombLabel = new JLabel(iconBomb);
+		bombLabel.setVisible(true);
+		bombLabel.setBounds(0,-10,35,50);
+		statBox.add(bombLabel);
+		
+		BufferedImage nuclear = null;
+		try{
+			nuclear = ImageIO.read(new File("Item_2.png"));
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		
+		Image dnuke = nuclear.getScaledInstance(30,25,10);
+		ImageIcon iconNuke = new ImageIcon(dnuke);
+		JLabel nukeLabel = new JLabel(iconNuke);
+		nukeLabel.setVisible(true);
+		nukeLabel.setBounds(0,-10,1010,50);
+		statBox.add(nukeLabel);
+		
+		
 
 
 	}
