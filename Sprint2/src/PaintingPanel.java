@@ -31,7 +31,8 @@ public class PaintingPanel extends JPanel {
 	}
 	public void addGameObject(GameObject obj){
 		if(renderList.contains(obj))return;
-		renderList.add(obj);
+		if(obj instanceof Item)renderList.add(0,obj);
+		else renderList.add(obj);
 	}
 	public void removeGameObject(GameObject obj){
 		renderList.remove(obj);

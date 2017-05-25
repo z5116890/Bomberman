@@ -87,7 +87,19 @@ public class Enemy extends GameObject {
 		}
 	}
 	private void die(){
-		//more will be added in a future sprint
+		int itemId = 1+rand.nextInt(3);
+		if(itemId == 3)itemId = 1 + rand.nextInt(3);
+		switch(GameManager.getGameManager().getDifficulty()){
+		case 1:
+			if(rand.nextFloat()<=9f)GameManager.getGameManager().addObject(new Item(gridX,gridY,itemId));
+			break;
+		case 2:
+			if(rand.nextFloat()<=0.75f)GameManager.getGameManager().addObject(new Item(gridX,gridY,itemId));
+			break;
+		case 3:
+			if(rand.nextFloat()<=0.35f)GameManager.getGameManager().addObject(new Item(gridX,gridY,itemId));
+			break;
+		}
 		GameManager.getGameManager().removeObject(this);
 	}
 	private void attack(){

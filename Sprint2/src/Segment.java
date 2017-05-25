@@ -29,6 +29,7 @@ public class Segment {
 			}
 	 */
 	// the map is broken down into 3x3 partitions with each cell being a 6x6 cell square
+	/*
 	private static final int[][] startSection = {
 			{EMP, EMP, EMP, BWL, EMP, WAL},
 			{EMP, PLR, WAL, EMP, EMP, WAL},
@@ -36,7 +37,7 @@ public class Segment {
 			{BWL, EMP, EMP, ENM, EMP, EMP},
 			{EMP, EMP, EMP, EMP, SWL, AWL},
 			{WAL, WAL, EMP, EMP, AWL, WAL}
-		};
+		};*/
 	private static final int[][] bendSection = {
 			{WAL, BWE, EMP, BWE, WAL, ANY},
 			{BWL, ENM, BWE, BWE, ANY, ANY},
@@ -49,7 +50,7 @@ public class Segment {
 			{EMP, EMP, BWE, EMP, SWL, EMP},
 			{EMP, BOE, BWE, BWE, SWL, WAL},
 			{EMP, BWL, EMP, EMP, BWL, EMP},
-			{BWE, WAL, EMP, BWE, WAL, WAL},
+			{BWE, WAL, EMP, BWE, BWE, BWE},
 			{ENM, BWE, BWE, EMP, WAL, ANY},
 			{ANY, AWL, BWE, EMP, ANY, EMP}
 		};
@@ -86,7 +87,7 @@ public class Segment {
 	private boolean linkedLeft = false;
 	private Segment right;
 	private boolean linkedRight = false;
-	private boolean hasBox = false;
+	private int specialType = GameManager.EMPTY;
 	
 	public Segment(){
 	}
@@ -139,8 +140,8 @@ public class Segment {
 				break;
 		}
 	}
-	public void giveBox(){
-		hasBox = true;
+	public void setSpecialType(int type){
+		specialType = type;
 	}
 	public ArrayList<Segment> getLinkedSegments(){
 		ArrayList<Segment> links = new ArrayList<Segment>();
@@ -233,9 +234,11 @@ public class Segment {
 		}
 		return null;
 	}
+	/*
 	public int[][] getStartArray(){
 		return convertToObjectCodes(startSection);
 	}
+	*/
 	private int[][] convertToObjectCodes(int[][] map){
 		int[][] output = new int[6][6];
 		Random rand = new Random();
@@ -340,7 +343,7 @@ public class Segment {
 					output[y][x] = value;
 					break;
 				case BOE:
-					output[y][x] =(hasBox?GameManager.BOX:GameManager.ENDZONE);
+					output[y][x] = specialType;
 					break;
 				
 				}
