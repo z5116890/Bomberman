@@ -69,11 +69,11 @@ public class LeaderBoard {
 	 * 			break out of loop
 	 * @param score
 	 */
-	public boolean checkScores(String name, int score) {
+	public boolean checkScores(String name, int score, String difficulty) {
 		int pos = 0;
 		for (String highScore: highScores) {
 			if (score > Integer.parseInt(highScore.split(":")[1])) {
-				String newHighScore = name + ":" + score;
+				String newHighScore = name + ":" + score + ":" + difficulty;
 				if (highScores.size() < MAX_SCORES) { //if arraylist has less than 5 scores
 					highScores.add(pos, newHighScore); //simply add
 				} else { //else it has 5 or more

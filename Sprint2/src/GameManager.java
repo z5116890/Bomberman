@@ -685,23 +685,30 @@ public class GameManager{
 		rankJLabel.setFont(new Font("Impact", Font.PLAIN,16));
 		rankJLabel.setForeground(Color.white);
 		rankJLabel.setSize(new Dimension(100,500));
-		rankJLabel.setBounds(100,200,200,50);
+		rankJLabel.setBounds(90,200,200,50);
 		background.add(rankJLabel);
 
 		JLabel nameJLabel = new JLabel("Name");
 		nameJLabel.setFont(new Font("Impact", Font.PLAIN,16));
 		nameJLabel.setForeground(Color.white);
 		nameJLabel.setSize(new Dimension(100,500));
-		nameJLabel.setBounds(300,200,200,50);
+		nameJLabel.setBounds(230,200,200,50);
 		background.add(nameJLabel);
 
-		JLabel scoreJLabel = new JLabel("Score");
+		JLabel scoreJLabel = new JLabel("Score (s)");
 		scoreJLabel.setFont(new Font("Impact", Font.PLAIN,16));
 		scoreJLabel.setForeground(Color.white);
 		scoreJLabel.setSize(new Dimension(100,500));
-		scoreJLabel.setBounds(500,200,200,50);
+		scoreJLabel.setBounds(370,200,200,50);
 		background.add(scoreJLabel);
 
+		JLabel difficultyJLabel = new JLabel("Difficulty");
+		difficultyJLabel.setFont(new Font("Impact", Font.PLAIN,16));
+		difficultyJLabel.setForeground(Color.white);
+		difficultyJLabel.setSize(new Dimension(100,500));
+		difficultyJLabel.setBounds(510,200,200,50);
+		background.add(difficultyJLabel);
+		
 		int spacing = 50;
 		int rank = 1;
 		for (String nameScore: leaderBoard.getLeaderBoard()) {
@@ -709,7 +716,7 @@ public class GameManager{
 			rankLabel.setFont(new Font("Impact", Font.PLAIN,16));
 			rankLabel.setForeground(Color.white);
 			rankLabel.setSize(new Dimension(100,500));
-			rankLabel.setBounds(100,200+spacing,200,50);
+			rankLabel.setBounds(90,200+spacing,200,50);
 			background.add(rankLabel);
 			
 			String name = nameScore.split(":")[0];
@@ -717,7 +724,7 @@ public class GameManager{
 			nameLabel.setFont(new Font("Impact", Font.PLAIN,16));
 			nameLabel.setForeground(Color.white);
 			nameLabel.setSize(new Dimension(100,500));
-			nameLabel.setBounds(300,200+spacing,200,50);
+			nameLabel.setBounds(230,200+spacing,200,50);
 			background.add(nameLabel);
 
 			int score = Integer.parseInt(nameScore.split(":")[1]);
@@ -725,8 +732,16 @@ public class GameManager{
 			scoreLabel.setFont(new Font("Impact", Font.PLAIN,16));
 			scoreLabel.setForeground(Color.white);
 			scoreLabel.setSize(new Dimension(100,500));
-			scoreLabel.setBounds(500,200+spacing,200,50);
+			scoreLabel.setBounds(370,200+spacing,200,50);
 			background.add(scoreLabel);
+			
+			String difficulty = nameScore.split(":")[2];
+			JLabel difficultyLabel = new JLabel(difficulty);
+			difficultyLabel.setFont(new Font("Impact", Font.PLAIN,16));
+			difficultyLabel.setForeground(Color.white);
+			difficultyLabel.setSize(new Dimension(100,500));
+			difficultyLabel.setBounds(510,200+spacing,200,50);
+			background.add(difficultyLabel);
 
 			spacing += 50;
 			rank += 1;

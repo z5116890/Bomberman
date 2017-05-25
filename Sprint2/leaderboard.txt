@@ -1,5 +1,5 @@
-Grant:100
-Dan:85
-Daniel:84
-Jig:50
-Austin:20
+Grant:100:Easy
+Dan:85:Hard
+Daniel:84:Medium
+Jig:50:Hard
+Austin:20:Easy
