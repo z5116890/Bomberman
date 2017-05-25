@@ -1224,8 +1224,12 @@ public class GameManager{
 		
 		//icons
 		BufferedImage img = null;
+		BufferedImage bomb = null;
+		BufferedImage nuclear = null;
 		try{
 			img = ImageIO.read(new File("Item_3.png"));
+			bomb = ImageIO.read(new File("Item_1.png"));
+			nuclear = ImageIO.read(new File("Item_2.png"));
 		}catch(IOException e){
 			e.printStackTrace();
 		}
@@ -1237,12 +1241,7 @@ public class GameManager{
 		bombIcon.setBounds(0,-10,520,50);
 		statBox.add(bombIcon);
 		
-		BufferedImage bomb = null;
-		try{
-			bomb = ImageIO.read(new File("Item_1.png"));
-		}catch(IOException e){
-			e.printStackTrace();
-		}
+		
 		
 		Image dbomb = bomb.getScaledInstance(30,25,10);
 		ImageIcon iconBomb = new ImageIcon(dbomb);
@@ -1250,13 +1249,8 @@ public class GameManager{
 		bombLabel.setVisible(true);
 		bombLabel.setBounds(0,-10,35,50);
 		statBox.add(bombLabel);
+	
 		
-		BufferedImage nuclear = null;
-		try{
-			nuclear = ImageIO.read(new File("Item_2.png"));
-		}catch(IOException e){
-			e.printStackTrace();
-		}
 		
 		Image dnuke = nuclear.getScaledInstance(30,25,10);
 		ImageIcon iconNuke = new ImageIcon(dnuke);
