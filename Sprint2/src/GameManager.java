@@ -1,13 +1,10 @@
-import com.sun.java.swing.plaf.motif.MotifBorders;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -16,7 +13,6 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.*;
-import javax.swing.plaf.basic.BasicBorders;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -151,10 +147,12 @@ public class GameManager{
 		map [0][18] = WALL_CENTRE;
 		map [0][19] = WALL_RIGHT;
 
-		map [0][8] = WALL_LEFT;
+		map [0][7] = WALL_LEFT;
+		map [0][8] = WALL_CENTRE;
 		map [0][9] = WALL_CENTRE;
 		map [0][10] = WALL_CENTRE;
-		map [0][11] = WALL_RIGHT;
+		map [0][11] = WALL_CENTRE;
+		map [0][12] = WALL_RIGHT;
 
 		map [19][0] = WALL_LEFT;
 		map [19][1] = WALL_CENTRE;
@@ -380,14 +378,14 @@ public class GameManager{
 		ImageIcon iconBomb = new ImageIcon(bomb);
 		JLabel bombLabel = new JLabel(iconBomb);
 		bombLabel.setVisible(true);
-		bombLabel.setBounds(0,-10,35,50);
+		bombLabel.setBounds(5,-10,35,50);
 		statBox.add(bombLabel);
 		
 		Image dTime = timerImg.getScaledInstance(30,25,10);
 		ImageIcon imageIcon = new ImageIcon(dTime);
 		JLabel timeIcon = new JLabel(imageIcon);
 		timeIcon.setVisible(true);
-		timeIcon.setBounds(0,-10,520,50);
+		timeIcon.setBounds(10,-10,520,50);
 		statBox.add(timeIcon);
 	
 		ImageIcon iconNuke = new ImageIcon(nuclear);
@@ -1271,7 +1269,7 @@ public class GameManager{
 		bombsLeft.setText("Bombs Away: " + player.bombsLeft() + "/" + player.getBombCount());
 		bombsLeft.setForeground(Color.yellow);
 		bombsLeft.setFont(new Font("Impact", Font.PLAIN,15));
-		bombsLeft.setBounds(35, -10, 150, 50);
+		bombsLeft.setBounds(40, -10, 150, 50);
 		statBox.add(bombsLeft);
 		
 		String time = "";
@@ -1285,7 +1283,7 @@ public class GameManager{
 		timer.setText("Time Left: "+time);
 		timer.setForeground(Color.yellow);
 		timer.setFont(new Font("Impact", Font.PLAIN,15));
-		timer.setBounds(280, -10, 150, 50);
+		timer.setBounds(290, -10, 150, 50);
 		statBox.add(timer);
 		
 		explosionSize.setText("Explosion Size: " + player.getExplosionSize());
