@@ -1,5 +1,2 @@
-Dan:90000:Comp2911
-s:224:Easy
-Horse Radish:209:Easy
-Spaghetti 9000000:197:Easy
-Grant:100:Easy
+Bob:600:Medium
+Jigs:200:Easy

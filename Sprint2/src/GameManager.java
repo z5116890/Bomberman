@@ -1144,7 +1144,7 @@ public class GameManager{
 			textField.setBounds(220,250,200,50);
 			background.add(textField);
 	
-			JLabel errorLabel = new JLabel("Must Enter Name");
+			JLabel errorLabel = new JLabel("Must Enter a Legit Name");
 			errorLabel.setFont(new Font("Impact", Font.PLAIN,16));
 			errorLabel.setForeground(Color.red);
 			errorLabel.setBounds(220,300,200,50);
@@ -1173,7 +1173,7 @@ public class GameManager{
 					
 					//check leaderboard scores
 					
-					if (name.isEmpty()) {
+					if (!name.matches("[a-zA-Z]*") || name.isEmpty()) {
 						background.add(errorLabel);
 						background.repaint();
 					} else if (leaderBoard.checkScores(name,score,difficulty)) {
