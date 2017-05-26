@@ -21,6 +21,11 @@ public class Enemy extends GameObject {
 	private Random rand;
 	private int deathTimer = 3;
 	private boolean dead = false;
+	/**
+	 * creates an enemy at a specified location
+	 * @param x the horizontal coordinate for the enemy
+	 * @param y the vertical coordinate for the enemy
+	 */
 	public Enemy(int x, int y) {
 		super(x, y);
 		rand = new Random();
@@ -45,6 +50,11 @@ public class Enemy extends GameObject {
 			break;
 		}
 	}
+	/**
+	 * First it checks if the enemy is touching an explosion, and dies if it is.
+	 * Then at set intervals then updates it's image, checks if can move, and check if it can place a wall
+	 * The probability of an action occurring is dependent on difficulty.
+	 */
 	public void act(){
 		super.act();
 		if(dead){
@@ -86,6 +96,11 @@ public class Enemy extends GameObject {
 			timer += rand.nextInt(HARD_TIMER);
 		}
 	}
+	/**
+	 * This method uses a random number generator to determine whether an item should be dropped upon death,
+	 * If so it will drop a random item and then tell the GameManager to delete the Enemy.
+	 * The odds of an item dropping is dependent on difficulty
+	 */
 	private void die(){
 		int itemId = 1+rand.nextInt(3);
 		if(itemId == 3)itemId = 1 + rand.nextInt(3);
@@ -102,6 +117,10 @@ public class Enemy extends GameObject {
 		}
 		GameManager.getGameManager().removeObject(this);
 	}
+	/**
+	 * Checks current location and adjacent locations for obstructions, if it has a free spot it generates a random number and uses it to determine whether it should
+	 * place a wall
+	 */
 	private void attack(){
 		GameManager gm = GameManager.getGameManager();
 		ArrayList<GameObject> objects = gm.getObjectsAtLocation(gridX, gridY);
@@ -142,6 +161,9 @@ public class Enemy extends GameObject {
 		animCap = 7;
 		GameManager.getGameManager().addObject(new Wall(gridX,gridY,true, 'N'));
 	}
+	/**
+	 * The enemy randomly chooses a direction, and if the adjacent tile in that directoin is free, the enemy moves into it.
+	 */
 	private void tryMove(){
 		int r = rand.nextInt(4);
 		int dx = 0;
@@ -170,6 +192,9 @@ public class Enemy extends GameObject {
 		gridX +=dx;
 		gridY += dy;
 	}
+	/**
+	 * the value of a counter is changed such that getImage() displays a different image
+	 */
 	private void animate(){
 		if(animState==0 && animDelay>0){
 			animDelay--;

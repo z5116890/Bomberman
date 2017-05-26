@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-public class GameObject {
+public abstract class GameObject {
 
 	public static final int UP = 1;
 	public static final int DOWN = 2;

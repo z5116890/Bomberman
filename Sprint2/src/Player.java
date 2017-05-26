@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 
 public class Player extends GameObject{
+	
 	public static final int BOMB = 5;
 	private int nextAction = 0;
 	private int bombCount = 1;
@@ -12,10 +13,12 @@ public class Player extends GameObject{
 		super("Player_small.png", x, y);
 		speed = 4;
 	}
-	//things that interact with player
-	//nothing interacts with player?
-	//player cannot walk in direction if something is blocking the way
-	//UP = 1, DOWN = 2, LEFT = 3, RIGHT = 4;
+	/**
+	 * Whenever the player wants to move this method will check if something's in the way, if something is in the way then it will try to push it,
+	 * if it can push the object or there's an empty space, the player will move to the desired location.
+	 * @param direction 
+	 * @return This function returns true if the player is moved, and false if it isn't
+	 */
 	public boolean interact(int direction){
 		//see if anything is in the way ie box, wall
 		if(direction == DOWN){
@@ -48,7 +51,11 @@ public class Player extends GameObject{
 	}
 	@Override
 	
-	
+	/**
+	 * The frame-by-frame actions of the Player is are done in act()
+	 * The Player first checks if its touching any items or explosions and acts accordingly, 
+	 * then if the player decides to move or place a bomb, the action will be done.
+	 */
 	public void act(){
 		if(dead){
 			if(deathTimer--<0)die();
@@ -85,22 +92,17 @@ public class Player extends GameObject{
 		}
 		super.act();
 	}
-
-	/*
-	public boolean movable(int x, int y){
-		GameObject obj = GameManager.getGameManager().getObjectAtLocation(x, y);
-		//if there is something there
-		if(obj != null){
-			//if it is not physical than return false
-			if(!(obj instanceof EndZone)) return false;
-		}
-		//else return true
-		return true;
-	}
-	*/
+	/**
+	 * Upon death the player tells the GameManager to reset the map.
+	 */
 	private void die(){
 		GameManager.getGameManager().reset();
 	}
+	/**
+	 * The GameManager will call this method whenever the player presses a key to move or place a bomb, This method decides
+	 * if it can do the action, and then sets that as the next action to be done in the next act()
+	 * @param action the action the Player wants to do. 
+	 */
 	public void setAction(int action){
 		switch(action){
 		case UP:case DOWN: case LEFT: case RIGHT:
@@ -125,6 +127,9 @@ public class Player extends GameObject{
 	public void decreasePlacedBombs(){
 		placedBombs--;
 	}
+	/**
+	 * If there isn't a bomb in the player's current position it will place a bomb
+	 */
 	private void placeBomb(){
 		for(GameObject obj:GameManager.getGameManager().getObjectsAtLocation(gridX, gridY)){
 			if(obj instanceof Bomb)return;
@@ -134,8 +139,9 @@ public class Player extends GameObject{
 		placedBombs++;
 	}
 	
-	//made function that returns how many bombs are left
-	//used to display on the top
+	/**
+	 * @return the amount of remaining bombs
+	 */
 	public int bombsLeft(){
 		return (bombCount - placedBombs);
 	}

@@ -8,7 +8,9 @@ public class Bomb extends GameObject{
 		super("bomb_small_alt.png", x, y);
 		this.owner = owner;
 	}
-	
+	/**
+	 * counts frames with a timer and explodes after a set amount of frames.
+	 */
 	public void act(){
 		super.act();
 		if(--timer<=0){
@@ -16,6 +18,9 @@ public class Bomb extends GameObject{
 			GameManager.getGameManager().removeObject(this);
 		}
 	}
+	/**
+	 * This method tries to place explosions at the location of the bomb and in the adjacent tiles in a direction facing outward.
+	 */
 	public void explode(){
 		if(detonated)return;
 		detonated = true;
@@ -28,6 +33,10 @@ public class Bomb extends GameObject{
 		owner.decreasePlacedBombs();
 		GameManager.getGameManager().removeObject(this);
 	}
+	/**
+	 * Similar to explode() except only called when the bomb is detonated by another, doesn't create an explosion from the specified direction.
+	 * @param dir the direction the explosion that hit it was going
+	 */
 	public void explode(int dir){
 		if(detonated)return;
 		detonated = true;
@@ -40,6 +49,14 @@ public class Bomb extends GameObject{
 		owner.decreasePlacedBombs();
 		GameManager.getGameManager().removeObject(this);
 	}
+	/**
+	 * A recursive function that tries to place a line of explosions in a specified direction until it reaches an obstruction or the explosion's max size
+	 * @param x horizontal coordinate of the explosion
+	 * @param y vertical coordinate of the explosion
+	 * @param dir the direction the explosion is headed
+	 * @param size the remaining length of the explosion
+	 * @return returns true if an explosion was placed, false if not
+	 */
 	public boolean placeExplosion(int x,int y,int dir,int size){
 		ArrayList<GameObject> toDestroy = new ArrayList<GameObject>();//If an explosion is made it will destroy everything in here
 		boolean placeExplosion = true;

@@ -1,5 +1,5 @@
+Dan:90000:Comp2911
+s:224:Easy
+Horse Radish:209:Easy
+Spaghetti 9000000:197:Easy
 Grant:100:Easy
-Dan:85:Hard
-Daniel:84:Medium
-Jig:50:Hard
-Austin:20:Easy
