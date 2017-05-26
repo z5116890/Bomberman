@@ -368,9 +368,11 @@ public class GameManager{
 		//icons for counters
 		BufferedImage bomb = null;
 		BufferedImage nuclear = null;
+		BufferedImage timerImg = null;
 		try{
 			bomb = ImageIO.read(new File("bombIcon.png"));
 			nuclear = ImageIO.read(new File("blastIcon.png"));
+			timerImg = ImageIO.read(new File("Item_3.png"));
 		}catch(IOException e){
 			e.printStackTrace();
 		}
@@ -380,6 +382,13 @@ public class GameManager{
 		bombLabel.setVisible(true);
 		bombLabel.setBounds(0,-10,35,50);
 		statBox.add(bombLabel);
+		
+		Image dTime = timerImg.getScaledInstance(30,25,10);
+		ImageIcon imageIcon = new ImageIcon(dTime);
+		JLabel timeIcon = new JLabel(imageIcon);
+		timeIcon.setVisible(true);
+		timeIcon.setBounds(0,-10,520,50);
+		statBox.add(timeIcon);
 	
 		ImageIcon iconNuke = new ImageIcon(nuclear);
 		JLabel nukeLabel = new JLabel(iconNuke);
@@ -1284,6 +1293,7 @@ public class GameManager{
 		statBox.add(explosionSize);
 		
 		//icons
+		/*
 		BufferedImage timerImg = null;
 		BufferedImage bomb = null;
 		BufferedImage nuclear = null;
@@ -1318,7 +1328,7 @@ public class GameManager{
 		JLabel nukeLabel = new JLabel(iconNuke);
 		nukeLabel.setVisible(true);
 		nukeLabel.setBounds(0,-10,1010,50);
-		statBox.add(nukeLabel);
+		statBox.add(nukeLabel);*/
 
 	}
 
