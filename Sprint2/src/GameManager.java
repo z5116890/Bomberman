@@ -423,8 +423,16 @@ public class GameManager{
 		boolean ended = false;
 		startTime = System.nanoTime();
 		while(!ended){
+
+			//Only need pause and exit buttons when pause menu not showing
+			if (!gamePaused) {
+				this.addBoardButtons(btnEndGame, btnPause);
+			} else {
+				panel.remove(btnEndGame);
+				panel.remove(btnPause);
+			}
+
 			time = System.nanoTime();//the time this 'frame' started is recorded so that the FPS (frames per second) can be controlled.
-			this.addBoardButtons(btnEndGame, btnPause);
 
 			if(quit){//this closes the game if the player decides to quit mid-game
 				panel.remove(btnEndGame);
@@ -912,14 +920,13 @@ public class GameManager{
 		//Make semi-opaque black panel that covers screen to indicate game paused
 		JPanel semiOpaquePanel = new JPanel();
 		semiOpaquePanel.setBackground(new Color(000, 000, 000, 200));
-		semiOpaquePanel.setSize(new Dimension(640, 640));
-		semiOpaquePanel.setBorder(BorderFactory.createEmptyBorder(0, 0, 640, 640));
+		semiOpaquePanel.setVisible(true);
+		semiOpaquePanel.setBounds(32, 32, 576, 576);
+		semiOpaquePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 10, 10));
 		panel.add(semiOpaquePanel);
 		panel.repaint();
-		frame.pack();
 
 		addPauseMenuButtons(semiOpaquePanel);
-
 	}
 	/**
 	 * This adds the buttons to the pause window.
@@ -931,9 +938,8 @@ public class GameManager{
 		JLabel lblPause = new JLabel("GAME PAUSED");
 		lblPause.setForeground(Color.white);
 		lblPause.setFont(new Font("Impact", Font.PLAIN,30));
-		lblPause.setBounds(240,155,200,50);
+		lblPause.setBounds(208,123,200,50);
 		semiOpaquePanel.add(lblPause);
-
 
 		//Create buttons
 		JButton btnResume = new JButton("Resume");
@@ -950,7 +956,7 @@ public class GameManager{
 		});
 		btnResume.setFont(new Font("Impact", Font.PLAIN,16));
 		btnResume.setForeground(new Color(208,17,8));
-		btnResume.setBounds(220,225,200,50);
+		btnResume.setBounds(188,225,200,50);
 
 		semiOpaquePanel.add(btnResume);
 
@@ -964,7 +970,7 @@ public class GameManager{
 		});
 		btnRestart.setFont(new Font("Impact", Font.PLAIN,16));
 		btnRestart.setForeground(new Color(208,17,8));
-		btnRestart.setBounds(220,295,200,50);
+		btnRestart.setBounds(188,295,200,50);
 		semiOpaquePanel.add(btnRestart);
 
 		//Help button - gives game instructions etc.
@@ -981,7 +987,7 @@ public class GameManager{
 		});
 		btnHelp.setFont(new Font("Impact", Font.PLAIN,16));
 		btnHelp.setForeground(new Color(208,17,8));
-		btnHelp.setBounds(220,365,200,50);
+		btnHelp.setBounds(188,365,200,50);
 		semiOpaquePanel.add(btnHelp);
 
 		//Quit button
@@ -994,7 +1000,7 @@ public class GameManager{
 		});
 		btnQuit.setFont(new Font("Impact", Font.PLAIN,16));
 		btnQuit.setForeground(new Color(208,17,8));
-		btnQuit.setBounds(220,435,200,50);
+		btnQuit.setBounds(188,435,200,50);
 		semiOpaquePanel.add(btnQuit);
 	}
 	/**
