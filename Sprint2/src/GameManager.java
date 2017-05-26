@@ -1282,8 +1282,6 @@ public class GameManager{
 		explosionSize.setFont(new Font("Impact", Font.PLAIN,15));
 		explosionSize.setBounds(523, -10, 150, 50);
 		statBox.add(explosionSize);
-<<<<<<< HEAD
-=======
 		
 		//icons
 		BufferedImage timerImg = null;
@@ -1321,10 +1319,6 @@ public class GameManager{
 		nukeLabel.setVisible(true);
 		nukeLabel.setBounds(0,-10,1010,50);
 		statBox.add(nukeLabel);
-		
-		
-
->>>>>>> c86d87f1a2731e61570db801ce5eafe3261db284
 
 	}
 
