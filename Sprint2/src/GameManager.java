@@ -525,18 +525,14 @@ public class GameManager{
 		JLabel background = new JLabel(imageIcon);
 		background.setVisible(true);
 		background.setSize(PaintingPanel.DEFAULT_WINDOW_SIZE,PaintingPanel.DEFAULT_WINDOW_SIZE);
-		
-		JPanel tempPanel = new JPanel();
-		frame.add(tempPanel);
-		tempPanel.add(background);
-		background.setVisible(true);
-		
+
+		frame.add(background);
 		addStartMenuButtons(background);
 
 		frame.pack();
 		frame.setSize(640,640);
 		while(!gameStarted)System.out.print("");
-		frame.remove(tempPanel);
+		frame.remove(background);
 		clip.stop();
 		clip.close();
 
