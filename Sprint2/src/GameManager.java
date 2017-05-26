@@ -1282,6 +1282,49 @@ public class GameManager{
 		explosionSize.setFont(new Font("Impact", Font.PLAIN,15));
 		explosionSize.setBounds(523, -10, 150, 50);
 		statBox.add(explosionSize);
+<<<<<<< HEAD
+=======
+		
+		//icons
+		BufferedImage timerImg = null;
+		BufferedImage bomb = null;
+		BufferedImage nuclear = null;
+		try{
+			timerImg = ImageIO.read(new File("Item_3.png"));
+			bomb = ImageIO.read(new File("Item_1.png"));
+			nuclear = ImageIO.read(new File("Item_2.png"));
+		}catch(IOException e){
+			e.printStackTrace();
+		}
+		
+		Image dTime = timerImg.getScaledInstance(30,25,10);
+		ImageIcon imageIcon = new ImageIcon(dTime);
+		JLabel timeIcon = new JLabel(imageIcon);
+		timeIcon.setVisible(true);
+		timeIcon.setBounds(0,-10,520,50);
+		statBox.add(timeIcon);
+		
+		
+		
+		Image dbomb = bomb.getScaledInstance(30,25,10);
+		ImageIcon iconBomb = new ImageIcon(dbomb);
+		JLabel bombLabel = new JLabel(iconBomb);
+		bombLabel.setVisible(true);
+		bombLabel.setBounds(0,-10,35,50);
+		statBox.add(bombLabel);
+	
+		
+		
+		Image dnuke = nuclear.getScaledInstance(30,25,10);
+		ImageIcon iconNuke = new ImageIcon(dnuke);
+		JLabel nukeLabel = new JLabel(iconNuke);
+		nukeLabel.setVisible(true);
+		nukeLabel.setBounds(0,-10,1010,50);
+		statBox.add(nukeLabel);
+		
+		
+
+>>>>>>> c86d87f1a2731e61570db801ce5eafe3261db284
 
 	}
 
