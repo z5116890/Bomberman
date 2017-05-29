@@ -326,7 +326,7 @@ public class GameManager{
 			ended = true;
 			for(EndZone e:endZones){
 				e.act();
-				if(!e.getActive())ended = true;
+				if(!e.getActive())ended = false;
 			}
 			if(reset)resetMap();
 			draw();
