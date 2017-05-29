@@ -1007,7 +1007,7 @@ public class GameManager{
 		JLabel lblPause = new JLabel("INSTRUCTIONS");
 		lblPause.setForeground(Color.white);
 		lblPause.setFont(new Font("Impact", Font.PLAIN,30));
-		lblPause.setBounds(240,155,250,50);
+		lblPause.setBounds(208,155,250,50);
 		semiOpaquePanel.add(lblPause);
 
 		//Read help.txt into JLabel
@@ -1034,7 +1034,7 @@ public class GameManager{
 
 		lblHelpText.setForeground(Color.white);
 		lblHelpText.setFont(new Font("Impact", Font.PLAIN,16));
-		lblHelpText.setBounds(230,150,200,300);
+		lblHelpText.setBounds(198,150,200,300);
 		semiOpaquePanel.add(lblHelpText);
 
 		//Make a button to go back to the pause menu
@@ -1050,7 +1050,7 @@ public class GameManager{
 		});
 		btnBack.setFont(new Font("Impact", Font.PLAIN,16));
 		btnBack.setForeground(new Color(208,17,8));
-		btnBack.setBounds(220,435,200,50);
+		btnBack.setBounds(188,435,200,50);
 		semiOpaquePanel.add(btnBack);
 	}
 	/**
