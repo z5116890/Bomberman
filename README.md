@@ -1,4 +1,4 @@
-# Toaster2911
+# Bomberman style game created in Java using Eclipse. Demonstrated the use of Object Oriented Design in Game Design through creating different classes for each game element. e.g. Boxes, Player, Bomb etc. 
 
 <img src="sokoban2.gif" alt="why it this called sokoban" style="width: 400px;"/>
 
